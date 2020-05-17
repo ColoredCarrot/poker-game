@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>poker-game</title>
+    <script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>
+
+    <link rel="stylesheet" href="css/uikit.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="js/uikit.min.js"></script>
+    <script src="js/uikit-icons.min.js"></script>
+
+    <script src="js/dom-confetti.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+    <!--suppress HtmlUnknownTarget -->
+    <script src="poker-game.js"></script>
+</head>
+<body>
+
+<p>
+    Enter a game ID and press Enter to join a game.
+    Alternatively, you can also <a href="#" id="host-a-game">host your own game</a>.
+</p>
+<label>
+    Game ID:
+    <input type="text" id="game-id-input" autocomplete="off"/>
+</label>
+
+</body>
+<script>
+    window.setTimeout(function () {
+        window.setInterval(function () {
+            window.UIkit.update();
+        }, 100)
+    }, 300);
+</script>
+</html>

@@ -1,0 +1,66 @@
+body {
+    overflow: hidden;
+}
+
+div.primary-container {
+    background-color: #ffc2b9;
+}
+
+.poker-pot-container {
+    width: 40%;
+    margin-top: -5vh;
+}
+
+.poker-my-hand-container {
+    width: 35%;
+    bottom: 10vh;
+}
+
+img.poker-hand {
+    max-height: 20vmin;
+}
+
+.range-bubble {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: -20px;
+}
+
+/* The speech bubble effect. https://leaverou.github.io/bubbly/ */
+.range-bubble:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border: 0.2em solid transparent;
+    border-top-color: #00aabb;
+    border-bottom: 0;
+    margin-left: -0.2em;
+    margin-bottom: -0.2em;
+}
+
+.poker-other-winner {
+    color: white;
+    background-color: #16c400;
+}
+
+#action-center {
+    margin-top: 10vh;
+    background-color: white;
+}
+
+#action-center.poker-action-center-win {
+    background-color: #16c400;
+    color: white;
+}
+
+img.poker-non-community-card {
+    filter: drop-shadow(2px 4px 6px #668da3);
+}
+
+.padding-left-small {
+    padding-left: 15px;
+}

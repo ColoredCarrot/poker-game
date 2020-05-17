@@ -1,0 +1,5 @@
+# Project exclude paths
+/.gradle/
+/build/
+/build/js/packages/poker-game/kotlin/
+/build/js/packages/poker-game-test/kotlin/

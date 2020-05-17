@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="poker-game-1.0-SNAPSHOT">
+    <output-path>D:\Dev\Stash\Website_Projects\poker-game\build\libs</output-path>
+    <root id="archive" name="poker-game-1.0-SNAPSHOT.jar">
+      <element id="module-output" name="info.voidev.stash.poker-game.poker-game.main" />
+    </root>
+  </artifact>
+</component>
