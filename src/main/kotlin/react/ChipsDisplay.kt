@@ -9,6 +9,11 @@ import react.dom.img
 import shared.Chips
 import vendor.findDOMNode
 
+fun RBuilder.chipsDisplay(chips: Chips, actualSizeMod: Double) = child(ChipsDisplay::class) {
+    attrs.chips = chips
+    attrs.actualSizeMod = actualSizeMod
+}
+
 external interface ChipsDisplayProps : RProps {
     var chips: Chips
     var actualSizeMod: Double

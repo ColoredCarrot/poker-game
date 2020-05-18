@@ -1,23 +1,20 @@
 package render
 
-import kotlinx.html.dom.create
+import org.w3c.dom.HTMLElement
+import react.chipsDisplay
 import shared.Chips
-import shared.Notify
 import vendor.Swal
-import kotlin.browser.document
 
 class AnteUpRenderer(private val ante: Int) : Renderable {
 
     override fun render() {
 
-        val addedToDOM = Notify()
-        val modalContent = Chips(ante).legacyrender(document.create, addedToDOM = addedToDOM).innerHTML
-
         Swal.Options(
             title = "Ante Up!",
-            html = modalContent,
+            html = """<div class="ante-up-modal-content-root"></div>""",
             onBeforeOpen = { modal: dynamic ->
-                addedToDOM.notify()
+                val root = (modal as HTMLElement).querySelector("div.ante-up-modal-content-root")
+                react.dom.render(root) { chipsDisplay(Chips(ante), 1.0) }
                 Unit
             },
             timer = 3000,
