@@ -11,7 +11,7 @@ class AnteUpRenderer(private val ante: Int) : Renderable {
     override fun render() {
 
         val addedToDOM = Notify()
-        val modalContent = Chips(ante).render(document.create, addedToDOM = addedToDOM).innerHTML
+        val modalContent = Chips(ante).legacyrender(document.create, addedToDOM = addedToDOM).innerHTML
 
         Swal.Options(
             title = "Ante Up!",

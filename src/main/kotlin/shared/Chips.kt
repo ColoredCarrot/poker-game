@@ -16,6 +16,7 @@ import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.Image
+import react.ChipsDisplay
 import kotlin.browser.document
 import kotlin.browser.window
 import kotlin.collections.ArrayList
@@ -55,6 +56,20 @@ class Chips(
     }
 
     fun render(
+        context: TagConsumer<HTMLElement>,
+        sizeMod: Double = 1.0,
+        addedToDOM: Notify? = null
+    ) {
+        val actualSizeMod = sizeMod * guessViewportSizeMod()
+        react.dom.render(context.div()) { child(ChipsDisplay::class) {
+            attrs {
+                chips = this@Chips
+                this.actualSizeMod = actualSizeMod
+            }
+        } }
+    }
+
+    fun legacyrender(
         context: TagConsumer<HTMLElement>,
         sizeMod: Double = 1.0,
         addedToDOM: Notify? = null
