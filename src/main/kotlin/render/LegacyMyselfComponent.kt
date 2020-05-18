@@ -15,7 +15,7 @@ import shared.render
 import kotlin.browser.document
 import kotlin.dom.clear
 
-class MyselfComponent(private val myself: PrivateGameState) : Component() {
+class LegacyMyselfComponent(private val myself: PrivateGameState) : Component() {
 
     override fun RenderContext.addStaticToDOM() {
         div("uk-position-bottom-center poker-my-hand-container") {

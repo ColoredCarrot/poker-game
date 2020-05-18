@@ -25,7 +25,7 @@ class GameRenderer(
         getMyFundsFn = { table.myself.playerInfo.money }
     )
     private val pot = PotComponent(table.pot)
-    private val myself = MyselfComponent(table.myself)
+    private val myself = LegacyMyselfComponent(table.myself)
     private val otherPlayers = OtherPlayersComponent(table.otherPlayers, table.winners, getActivePlayerFn)
 
     private val mySessionId get() = table.mySessionId
