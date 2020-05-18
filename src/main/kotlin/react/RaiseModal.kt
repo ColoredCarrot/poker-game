@@ -41,7 +41,7 @@ private class RaiseModal : RComponent<RaiseModalProps, RaiseModalState>() {
 
     override fun RaiseModalState.init() {
         amountToRaise = -1
-        uiKitModalRef = createRef()
+        uiKitModalRef = vendor.createRef()
     }
 
     override fun RBuilder.render() {

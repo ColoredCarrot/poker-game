@@ -5,6 +5,9 @@ import kotlinx.html.id
 import kotlinx.html.js.div
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.MouseEvent
+import react.HandDisplayProps
+import react.ReactElement
+import react.handDisplay
 import shared.PrivateGameState
 import shared.RenderContext
 import shared.UIkit
@@ -22,8 +25,17 @@ class MyselfComponent(private val myself: PrivateGameState) : Component() {
             }
             div {
                 id = ID_MY_HAND_CONTAINER
-                myself.playerInfo.hand!!.render(this@addStaticToDOM)
-                    .ondblclick = { onHandDblClick(it) }
+                /*myself.playerInfo.hand!!.render(this@addStaticToDOM)
+                    .ondblclick = { onHandDblClick(it) }*/
+
+                react.dom.render(div()) {
+                    lateinit var handDisplay: ReactElement
+                    handDisplay = handDisplay(myself.playerInfo.hand!!, true) { newOrder ->
+                        myself.playerInfo.hand!!.reorderManually(newOrder)
+                        @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
+                        (handDisplay.props as HandDisplayProps).hand = myself.playerInfo.hand!!
+                    }
+                }
             }
         }
     }
