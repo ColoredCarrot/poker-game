@@ -1,11 +1,18 @@
-package react
+package usingreact
 
 import audio.SoundEffectGroups
 import kotlinext.js.jsObject
 import kotlinx.html.classes
 import org.w3c.dom.HTMLElement
+import react.RBuilder
+import react.RComponent
+import react.RProps
+import react.RReadableRef
+import react.RState
+import react.child
 import react.dom.div
 import react.dom.img
+import react.functionalComponent
 import shared.ConcreteCard
 import shared.Hand
 import shared.UIkit

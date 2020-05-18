@@ -1,7 +1,7 @@
 package render
 
 import org.w3c.dom.HTMLElement
-import react.chipsDisplay
+import usingreact.chipsDisplay
 import shared.Chips
 import vendor.Swal
 

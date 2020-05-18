@@ -1,8 +1,12 @@
-package react
+package usingreact
 
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.HTMLImageElement
+import react.RBuilder
+import react.RComponent
+import react.RProps
+import react.RState
 import react.dom.canvas
 import react.dom.div
 import react.dom.img

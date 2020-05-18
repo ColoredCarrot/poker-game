@@ -5,9 +5,9 @@ import kotlinx.html.id
 import kotlinx.html.js.div
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.MouseEvent
-import react.HandDisplayProps
+import usingreact.HandDisplayProps
 import react.ReactElement
-import react.handDisplay
+import usingreact.handDisplay
 import shared.PrivateGameState
 import shared.RenderContext
 import shared.UIkit

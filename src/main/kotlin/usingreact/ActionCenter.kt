@@ -1,11 +1,16 @@
-package react
+package usingreact
 
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
+import react.RBuilder
+import react.RComponent
+import react.RProps
+import react.RState
 import react.dom.button
 import react.dom.div
 import react.dom.h3
 import react.dom.h4
+import react.setState
 import shared.Chips
 
 data class ActionCenterCallbacks(

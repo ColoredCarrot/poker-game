@@ -1,19 +1,26 @@
-package react
+package usingreact
 
 import kotlinx.html.ButtonType
 import kotlinx.html.InputType
 import kotlinx.html.js.onSubmitFunction
 import org.w3c.dom.HTMLElement
+import react.RBuilder
+import react.RComponent
+import react.RProps
+import react.RReadableRef
+import react.RState
 import react.dom.button
 import react.dom.div
 import react.dom.form
 import react.dom.h2
 import react.dom.input
 import react.dom.p
+import react.setState
 import shared.UIkit
 import shared.htmlAttrs
 
-fun RBuilder.raiseModal(funds: Int, amountToCall: Int, shown: Boolean, raiseHandler: (raiseAmount: Int) -> Unit) = child(RaiseModal::class) {
+fun RBuilder.raiseModal(funds: Int, amountToCall: Int, shown: Boolean, raiseHandler: (raiseAmount: Int) -> Unit) = child(
+    RaiseModal::class) {
     attrs {
         this.funds = funds
         this.amountToCall = amountToCall

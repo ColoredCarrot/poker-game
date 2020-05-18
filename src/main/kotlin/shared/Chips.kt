@@ -11,7 +11,7 @@ import kotlinx.serialization.SerialDescriptor
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Serializer
 import org.w3c.dom.HTMLElement
-import react.chipsDisplay
+import usingreact.chipsDisplay
 
 @Serializable(with = Chips.ChipsSerializer::class)
 class Chips(
