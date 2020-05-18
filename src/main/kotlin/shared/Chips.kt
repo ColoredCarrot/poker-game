@@ -69,6 +69,8 @@ class Chips(
         } }
     }
 
+    //TODO remove
+/*
     fun legacyrender(
         context: TagConsumer<HTMLElement>,
         sizeMod: Double = 1.0,
@@ -122,10 +124,10 @@ class Chips(
                             paint()
                         }
                     } else {
-                        //TODO do this in onFinalize somehow
+                        //TO DO do this in onFinalize somehow
                         window.setTimeout({
 
-                            // TODO: this is in a timeout because the below line sometimes throws ClassCastException
+                            // TO DO: this is in a timeout because the below line sometimes throws ClassCastException
                             paint()
 
                         }, 1)
@@ -137,6 +139,7 @@ class Chips(
 
         }
     }
+*/
 
     /**
      * Calculates the chip distribution for [value],

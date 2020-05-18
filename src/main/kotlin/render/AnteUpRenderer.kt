@@ -8,7 +8,6 @@ import vendor.Swal
 class AnteUpRenderer(private val ante: Int) : Renderable {
 
     override fun render() {
-
         Swal.Options(
             title = "Ante Up!",
             html = """<div class="ante-up-modal-content-root"></div>""",
