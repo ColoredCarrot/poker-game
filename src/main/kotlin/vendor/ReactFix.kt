@@ -4,6 +4,7 @@
 package vendor
 
 import org.w3c.dom.Element
+import react.RMutableRef
 import react.ReactElement
 
 // See https://reactjs.org/docs/react-dom.html

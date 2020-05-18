@@ -1,8 +1,6 @@
 package shared
 
 import kotlinx.html.TagConsumer
-import kotlinx.html.canvas
-import kotlinx.html.id
 import kotlinx.html.js.div
 import kotlinx.serialization.Decoder
 import kotlinx.serialization.Encoder
@@ -12,20 +10,8 @@ import kotlinx.serialization.PrimitiveKind
 import kotlinx.serialization.SerialDescriptor
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Serializer
-import org.w3c.dom.CanvasRenderingContext2D
-import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.HTMLElement
-import org.w3c.dom.Image
-import react.ChipsDisplay
-import kotlin.browser.document
-import kotlin.browser.window
-import kotlin.collections.ArrayList
-import kotlin.collections.List
-import kotlin.collections.plusAssign
-import kotlin.collections.reverse
-import kotlin.collections.set
-import kotlin.js.Promise
-import kotlin.random.Random
+import react.chipsDisplay
 
 @Serializable(with = Chips.ChipsSerializer::class)
 class Chips(
@@ -45,28 +31,14 @@ class Chips(
         }
     }
 
-    private fun guessViewportSizeMod(): Double {
-        val vw = document.documentElement!!.clientWidth
-        return when {
-            vw >= 1600 -> 1.0
-            vw >= 1200 -> 0.8
-            vw >= 960 -> 0.5
-            else -> 0.3
-        }
-    }
-
     fun render(
         context: TagConsumer<HTMLElement>,
         sizeMod: Double = 1.0,
         addedToDOM: Notify? = null
     ) {
-        val actualSizeMod = sizeMod * guessViewportSizeMod()
-        react.dom.render(context.div()) { child(ChipsDisplay::class) {
-            attrs {
-                chips = this@Chips
-                this.actualSizeMod = actualSizeMod
-            }
-        } }
+        react.dom.render(context.div()) {
+            chipsDisplay(this@Chips, sizeMod)
+        }
     }
 
     //TODO remove

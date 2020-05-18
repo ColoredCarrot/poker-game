@@ -8,18 +8,29 @@ import react.dom.div
 import react.dom.img
 import shared.Chips
 import vendor.findDOMNode
+import kotlin.browser.document
 
-fun RBuilder.chipsDisplay(chips: Chips, actualSizeMod: Double) = child(ChipsDisplay::class) {
-    attrs.chips = chips
-    attrs.actualSizeMod = actualSizeMod
+private fun guessViewportSizeMod(): Double {
+    val vw = document.documentElement!!.clientWidth
+    return when {
+        vw >= 1600 -> 1.0
+        vw >= 1200 -> 0.8
+        vw >= 960 -> 0.5
+        else -> 0.3
+    }
 }
 
-external interface ChipsDisplayProps : RProps {
+fun RBuilder.chipsDisplay(chips: Chips, sizeMod: Double) = child(ChipsDisplay::class) {
+    attrs.chips = chips
+    attrs.actualSizeMod = sizeMod * guessViewportSizeMod()
+}
+
+private external interface ChipsDisplayProps : RProps {
     var chips: Chips
     var actualSizeMod: Double
 }
 
-class ChipsDisplay : RComponent<ChipsDisplayProps, RState>() {
+private class ChipsDisplay : RComponent<ChipsDisplayProps, RState>() {
 
     override fun RBuilder.render() {
         div {

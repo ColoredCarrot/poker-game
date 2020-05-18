@@ -1,10 +1,12 @@
 package shared
 
+import kotlinx.html.Tag
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.url.URL
 import org.w3c.dom.url.URLSearchParams
+import react.dom.RDOMBuilder
 import kotlin.browser.document
 import kotlin.browser.window
 import kotlin.properties.ReadOnlyProperty
@@ -114,3 +116,5 @@ inline fun modifyURLSearchParams(url: String, block: (URLSearchParams) -> Unit):
     urlParser.search = params.toString()
     return urlParser.href
 }
+
+val <T : Tag> RDOMBuilder<T>.htmlAttrs get() = attrs.attributes

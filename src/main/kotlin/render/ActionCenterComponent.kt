@@ -33,6 +33,7 @@ import kotlin.dom.removeClass
 /**
  * The action center containing round controls.
  */
+@Deprecated("Replaced by React ActionCenter")
 class ActionCenterComponent(
     private val foldFn: () -> Unit,
     private val callFn: () -> Unit,
