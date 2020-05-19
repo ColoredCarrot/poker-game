@@ -10,10 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PrivateGameState(
     val playerInfo: PlayerInfo
-) {
+)
 
-    inline fun alterPlayerInfo(block: (PlayerInfo) -> Unit): PrivateGameState {
-        return copy(playerInfo = playerInfo.copy().also(block))
-    }
-
-}
+inline fun PrivateGameState.setPlayerInfo(playerInfo: (PlayerInfo) -> PlayerInfo) =
+    copy(playerInfo = playerInfo(this.playerInfo))

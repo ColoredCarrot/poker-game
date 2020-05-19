@@ -21,6 +21,10 @@ data class PlayerInfo(
     }
 }
 
+inline fun PlayerInfo.setHand(hand: (Hand?) -> Hand?) = copy(hand = hand(this.hand))
+
+inline fun PlayerInfo.setMoney(money: (Chips) -> Chips) = copy(money = money(this.money))
+
 @Serializable
 data class PlayerInfoList(val all: LinkedHashSet<PlayerInfo>) : Iterable<PlayerInfo> by all {
 

@@ -1,4 +1,5 @@
 package render
+/*
 
 import kotlinx.html.dom.append
 import kotlinx.html.id
@@ -25,13 +26,15 @@ class LegacyMyselfComponent(private val myself: PrivateGameState) : Component() 
             }
             div {
                 id = ID_MY_HAND_CONTAINER
-                /*myself.playerInfo.hand!!.render(this@addStaticToDOM)
-                    .ondblclick = { onHandDblClick(it) }*/
+                */
+/*myself.playerInfo.hand!!.render(this@addStaticToDOM)
+                    .ondblclick = { onHandDblClick(it) }*//*
+
 
                 react.dom.render(div()) {
                     lateinit var handDisplay: ReactElement
                     handDisplay = handDisplay(myself.playerInfo.hand!!, true) { newOrder ->
-                        myself.playerInfo.hand!!.reorderManually(newOrder)
+                        myself.playerInfo.hand!!.MUTreorderManually(newOrder)
                         @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
                         (handDisplay.props as HandDisplayProps).hand = myself.playerInfo.hand!!
                     }
@@ -70,3 +73,4 @@ class LegacyMyselfComponent(private val myself: PrivateGameState) : Component() 
         private const val MY_MONEY_RENDER_SIZE_MOD = 0.7
     }
 }
+*/

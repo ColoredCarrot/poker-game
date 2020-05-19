@@ -1,4 +1,5 @@
 package host
+/*
 
 import comm.Host
 import comm.msg.Messages
@@ -86,7 +87,9 @@ class GameHost {
 
         private val gameSettings = GameSettings()
 
-        /** Called when host presses button to start game */
+        */
+/** Called when host presses button to start game *//*
+
         private fun onStartGame() {
             val drawCards = Card.drawCards()
 
@@ -308,3 +311,4 @@ class GameHost {
         private const val COMMUNITY_CARDS_COUNT = 5
     }
 }
+*/

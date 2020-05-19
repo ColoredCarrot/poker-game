@@ -1,4 +1,5 @@
 package render
+/*
 
 import kotlinx.html.js.div
 import kotlinx.html.style
@@ -107,3 +108,4 @@ class GameRenderer(
         val raiseFn: (raiseAmount: Int) -> Unit
     )
 }
+*/

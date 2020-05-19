@@ -1,4 +1,5 @@
 package shared
+/*
 
 import audio.SoundEffectGroups
 import kotlinx.html.TagConsumer
@@ -50,7 +51,7 @@ fun Hand.render(ctx: TagConsumer<HTMLElement>, skipCommunityCards: Boolean = fal
                 val cardElements = iter.map { it.firstElementChild!! }.toList()
 
                 val newOrder = cardElements.map { it.getAttribute(ATTR_DATA_POKER_IDX)!!.toInt() }
-                reorderManually(newOrder)
+                MUTreorderManually(newOrder)
 
                 // Update data-poker-idx
                 for ((index, cardElement) in cardElements.withIndex()) {
@@ -79,3 +80,4 @@ fun Hand.render(ctx: TagConsumer<HTMLElement>, skipCommunityCards: Boolean = fal
 }
 
 private const val ATTR_DATA_POKER_IDX = "data-poker-idx"
+*/

@@ -1,4 +1,5 @@
 package render
+/*
 
 import comm.msg.Messages
 import kotlinx.html.dom.append
@@ -235,3 +236,4 @@ private class OtherPlayerComponent(val player: PlayerInfo, val offsets: Offsets)
         private const val MONEY_RENDER_SIZE_MOD = 0.7
     }
 }
+*/

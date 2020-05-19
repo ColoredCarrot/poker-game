@@ -1,4 +1,5 @@
 package participant
+/*
 
 import comm.Participant
 import comm.msg.Messages
@@ -145,3 +146,4 @@ class GameParticipant(connectToGameId: String) {
     }
 
 }
+*/

@@ -1,7 +1,6 @@
 package usingreact
 
 import audio.SoundEffectGroups
-import kotlinext.js.jsObject
 import kotlinx.html.classes
 import org.w3c.dom.HTMLElement
 import react.RBuilder
@@ -16,6 +15,7 @@ import react.functionalComponent
 import shared.ConcreteCard
 import shared.Hand
 import shared.UIkit
+import shared.attrsApplyStyle
 import kotlin.browser.window
 
 fun RBuilder.handDisplay(
@@ -56,8 +56,7 @@ private class HandDisplay : RComponent<HandDisplayProps, RState>() {
                 if (!props.renderCommunityCards && concreteCard.isCommunityCard) continue
 
                 div {
-                    @Suppress("UnsafeCastFromDynamic")
-                    attrs["style"] = jsObject<dynamic> { minWidth = "4vw" }
+                    attrsApplyStyle { minWidth = "4vw" }
 
                     cardDisplay(concreteCard, index)
                 }

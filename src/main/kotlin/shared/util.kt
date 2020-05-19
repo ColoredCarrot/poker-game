@@ -1,5 +1,6 @@
 package shared
 
+import kotlinext.js.jsObject
 import kotlinx.html.Tag
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.Document
@@ -14,7 +15,8 @@ import kotlin.random.Random
 import kotlin.reflect.KProperty
 
 @Suppress("SpellCheckingInspection")
-val UIkit inline get() = window.asDynamic().UIkit
+val UIkit
+    inline get() = window.asDynamic().UIkit
 
 @Suppress("FunctionName", "SpellCheckingInspection")
 fun UIkitUpdate() {
@@ -66,7 +68,7 @@ fun Offsets.toStyleString() = buildString {
 }
 
 @Suppress("unused")
-inline fun<reified T : Element?> Document.elementById(id: String) = object : ReadOnlyProperty<Any?, T> {
+inline fun <reified T : Element?> Document.elementById(id: String) = object : ReadOnlyProperty<Any?, T> {
     override fun getValue(thisRef: Any?, property: KProperty<*>): T {
         return document.getElementById(id) as T
     }
@@ -118,3 +120,9 @@ inline fun modifyURLSearchParams(url: String, block: (URLSearchParams) -> Unit):
 }
 
 val <T : Tag> RDOMBuilder<T>.htmlAttrs get() = attrs.attributes
+
+//TODO test
+inline fun RDOMBuilder<*>.attrsApplyStyle(styler: dynamic.() -> Unit) {
+    @Suppress("UnsafeCastFromDynamic")
+    attrs["style"] = jsObject(styler)
+}

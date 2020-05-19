@@ -17,28 +17,25 @@ class ConcreteCard(val card: Card, val isCommunityCard: Boolean) {
     }
 }
 
+//TODO make immutable
 @Serializable
-class Hand(private val cards_: MutableList<ConcreteCard>) : Comparable<Hand> {
-
-    val cards get() = cards_
+class Hand(val cards: List<ConcreteCard>) : Comparable<Hand> {
 
     // TODO: Add some auto sorters (by value, by faction, etc.)
+    fun reorderManually(newIndices: List<Int>): Hand {
+        if (newIndices.size != cards.size) throw IllegalArgumentException()
 
-    fun reorderManually(newIndices: List<Int>) {
-        if (newIndices.size != cards_.size) throw IllegalArgumentException()
-
-        val new = Array(cards_.size) { i ->
-            cards_[newIndices[i]]
+        val new = Array(cards.size) { i ->
+            cards[newIndices[i]]
         }
 
-        cards_.clear()
-        cards_.addAll(new)
+        return Hand(new.asList())
     }
 
-    fun evaluate(): Int = when (cards_.size) {
+    fun evaluate(): Int = when (cards.size) {
         5 -> {
             val nr = IntArray(5) { i ->
-                val card = cards_[i].card
+                val card = cards[i].card
                 when (card.typeName) {
                     "jack" -> RankPokerHandPublic.J
                     "queen" -> RankPokerHandPublic.Q
@@ -48,7 +45,7 @@ class Hand(private val cards_: MutableList<ConcreteCard>) : Comparable<Hand> {
                 }
             }
             val suits = IntArray(5) { i ->
-                val card = cards_[i].card
+                val card = cards[i].card
                 when (card.faction) {
                     Card.Faction.SPADES -> 1
                     Card.Faction.CLUBS -> 2
@@ -62,7 +59,7 @@ class Hand(private val cards_: MutableList<ConcreteCard>) : Comparable<Hand> {
         7 -> {
             // TODO use faster algorithm from RankPokerHandPublic
             val nr = IntArray(7) { i ->
-                val card = cards_[i].card
+                val card = cards[i].card
                 when (card.typeName) {
                     "jack" -> RankPokerHandPublic.J
                     "queen" -> RankPokerHandPublic.Q
@@ -72,7 +69,7 @@ class Hand(private val cards_: MutableList<ConcreteCard>) : Comparable<Hand> {
                 }
             }
             val suits = IntArray(7) { i ->
-                val card = cards_[i].card
+                val card = cards[i].card
                 when (card.faction) {
                     Card.Faction.SPADES -> 1
                     Card.Faction.CLUBS -> 2
@@ -87,7 +84,7 @@ class Hand(private val cards_: MutableList<ConcreteCard>) : Comparable<Hand> {
                 .max()!!
         }
 
-        else -> error("Evaluating hands with ${cards_.size} cards is not supported")
+        else -> error("Evaluating hands with ${cards.size} cards is not supported")
     }
 
     fun evaluateRank(): RankPokerHandPublic.Combination {
@@ -95,7 +92,7 @@ class Hand(private val cards_: MutableList<ConcreteCard>) : Comparable<Hand> {
     }
 
     override fun compareTo(other: Hand): Int {
-        if (cards_.size != other.cards_.size) throw IllegalArgumentException("Cannot compare hands with different number of cards")
+        if (cards.size != other.cards.size) throw IllegalArgumentException("Cannot compare hands with different number of cards")
         return evaluate().compareTo(other.evaluate())
     }
 
@@ -152,3 +149,6 @@ private fun subsetsOfSize(set: List<Int>, k: Int): List<List<Int>> {
     val setWithoutX = set.drop(1)
     return subsetsOfSize(setWithoutX, k) + subsetsOfSize(setWithoutX, k - 1).map { it + x }
 }
+
+
+operator fun Hand.plus(moreCards: Iterable<ConcreteCard>) = Hand(cards + moreCards)

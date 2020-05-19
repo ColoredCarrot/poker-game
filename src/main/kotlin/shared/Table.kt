@@ -13,6 +13,13 @@ class Table(
     @Transient
     val winners = ArrayList<SessionId>()
 
+    constructor(
+        pot: Chips, otherPlayers: PlayerInfoList, myself: PrivateGameState,
+        winners: List<SessionId>
+    ) : this(pot, otherPlayers, myself) {
+        this.winners += winners
+    }
+
     val allPlayers get() = PlayerInfoList(LinkedHashSet(otherPlayers.all).also { it += myself.playerInfo })
 
     val mySessionId get() = myself.playerInfo.sessionId
@@ -20,6 +27,39 @@ class Table(
     val allSessionIds get() = listOf(mySessionId) + otherPlayers.all.map { it.sessionId }
 
 }
+
+inline fun Table.setPot(pot: (Chips) -> Chips) = Table(
+    pot(this.pot),
+    otherPlayers, myself, winners
+)
+
+inline fun Table.setMyself(myself: (PrivateGameState) -> PrivateGameState) = Table(
+    pot, otherPlayers, myself(this.myself), winners
+)
+
+inline fun Table.setWinners(winners: (List<SessionId>) -> List<SessionId>) = Table(
+    pot, otherPlayers, myself, winners(this.winners)
+)
+
+inline fun Table.setMyselfPlayerInfo(myselfPlayerInfo: (PlayerInfo) -> PlayerInfo) =
+    setMyself { it.setPlayerInfo(myselfPlayerInfo) }
+
+fun Table.reorderMyHand(newOrder: List<Int>) = Table(
+    pot, otherPlayers,
+    myself.setPlayerInfo { it.setHand { it!!.reorderManually(newOrder) } },
+    winners
+)
+
+inline fun Table.mapAllPlayers(map: (PlayerInfo) -> PlayerInfo) =
+    Table(
+        pot,
+        PlayerInfoList(otherPlayers.mapTo(LinkedHashSet(), map)),
+        myself.setPlayerInfo(map),
+        winners
+    )
+
+inline fun Table.mapPlayer(player: SessionId, map: (PlayerInfo) -> PlayerInfo) =
+    mapAllPlayers { if (it.sessionId == player) map(it) else it }
 
 //<editor-fold desc="Legacy rendering">
 /*fun Table.render(

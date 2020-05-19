@@ -19,6 +19,7 @@ class Chips(
     private val dispenser: ChipDispenser = ChipDispenser.DEFAULT
 ) {
 
+    @set:Deprecated("don't use! will be immutable")
     var value = value
         set(value) {
             if (value < 0) throw IllegalArgumentException("value $value should be non-negative")
@@ -30,6 +31,10 @@ class Chips(
             throw IllegalArgumentException("value $value should be non-negative")
         }
     }
+
+    fun setValue(v: Int) = Chips(v, dispenser)
+
+    inline fun updateValue(vc: (Int) -> Int) = setValue(vc(value))
 
     fun render(
         context: TagConsumer<HTMLElement>,
@@ -189,3 +194,6 @@ class Chips(
     }
 
 }
+
+operator fun Chips.plus(x: Int) = updateValue { it + x }
+operator fun Chips.minus(x: Int) = updateValue { it - x }
