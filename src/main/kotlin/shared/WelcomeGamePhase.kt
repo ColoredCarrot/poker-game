@@ -33,8 +33,7 @@ private external interface WelcomeGamePhaseProps : RProps {
 private val WelcomeGamePhase = functionalComponent<WelcomeGamePhaseProps> { props ->
     div {
         p {
-            +"Enter a game ID and press Enter to join a game."
-            +"Alternatively, you can also "
+            +"Enter a game ID and press Enter to join a game. Alternatively, you can also "
             a(href = "#") {
                 +"host your own game"
                 attrs.onClickFunction = { evt ->
