@@ -117,16 +117,16 @@ private sealed class GamePhase {
                     )
                 }
 
+                connections.sendDynamic { sid ->
+                    Messages.TotalGameReset(personalizedTables[sid]!!, gameSettings.ante).jsonMessage()
+                }
+
                 switchPhaseFn(HostPlaying(
                     connections,
                     gameSettings,
                     communityCards,
                     personalizedTables[connections.myPeerId]!!
                 ))
-
-                connections.sendDynamic { sid ->
-                    Messages.TotalGameReset(personalizedTables[sid]!!, gameSettings.ante).jsonMessage()
-                }
             })
         }
     }
