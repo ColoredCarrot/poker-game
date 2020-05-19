@@ -15,9 +15,9 @@ data class GameProps(
     val amountToCall: Int,
     val actionCenterCallbacks: ActionCenterCallbacks,
     val onHandReorder: (newOrder: List<Int>) -> Unit
-) : RProps {
-    val myself get() = table.myself.playerInfo
-}
+) : RProps
+
+val GameProps.myself get() = table.myself.playerInfo
 
 fun RBuilder.game(props: GameProps) = child(Game, props) {}
 
