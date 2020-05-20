@@ -1,6 +1,7 @@
 package usingreact
 
 import kotlinx.html.classes
+import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.RComponent
@@ -62,6 +63,7 @@ private class ActionCenter : RComponent<ActionCenterProps, ActionCenterState>() 
 
     override fun RBuilder.render() {
         div("uk-position-top-center uk-width-1-6 uk-padding-small") {
+            attrs.id = "action-center"
             if (props.youWin) {
                 attrs.classes += "poker-action-center-win"
             }
