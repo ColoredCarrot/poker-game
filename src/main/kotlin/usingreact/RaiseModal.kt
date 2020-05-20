@@ -87,9 +87,9 @@ private class RaiseModal : RComponent<RaiseModalProps, RaiseModalState>() {
         if (prevProps.shown != props.shown) {
             val uiKitModal = UIkit.modal(uiKitModalRef.current!!)
             if (props.shown) {
-                uiKitModal.hide()
-            } else {
                 uiKitModal.show()
+            } else {
+                uiKitModal.hide()
             }
         }
     }
