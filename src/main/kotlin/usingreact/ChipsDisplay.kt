@@ -6,11 +6,13 @@ import org.w3c.dom.HTMLImageElement
 import react.RBuilder
 import react.RComponent
 import react.RProps
+import react.RReadableRef
 import react.RState
 import react.dom.canvas
 import react.dom.div
 import react.dom.img
 import shared.Chips
+import vendor.createRef
 import vendor.findDOMNode
 import kotlin.browser.document
 
@@ -61,38 +63,36 @@ private external interface ChipStackProps : RProps {
     var actualSizeMod: Double
 }
 
-private external interface ChipStackState : RState {
-    var canvasRef: HTMLCanvasElement
-    var imgRef: HTMLImageElement
-}
+private class ChipStack : RComponent<ChipStackProps, RState>() {
 
-private class ChipStack : RComponent<ChipStackProps, ChipStackState>() {
+    private lateinit var canvasRef: RReadableRef<HTMLCanvasElement>
+    private lateinit var imgRef: RReadableRef<HTMLImageElement>
+
+    override fun RState.init() {
+        canvasRef = createRef()
+        imgRef = createRef()
+    }
 
     override fun RBuilder.render() {
 
         canvas {
-            ref {
-                state.canvasRef = findDOMNode(it) as HTMLCanvasElement
-            }
+            ref = canvasRef
         }
         img(src = "chips/${props.chip}.png") {
             attrs.attributes["hidden"] = "hidden"
-
-            ref {
-                state.imgRef = findDOMNode(it) as HTMLImageElement
-            }
+            ref = imgRef
         }
 
     }
 
     override fun componentDidMount() {
-        val canvas = state.canvasRef
+        val canvas = canvasRef.current!!
 
         canvas.width = (CHIP_STACK_WIDTH * props.actualSizeMod).toInt()
         canvas.height = (CHIP_STACK_HEIGHT * props.actualSizeMod).toInt()
 
         val ctx = canvas.getContext("2d") as CanvasRenderingContext2D
-        val img = state.imgRef
+        val img = imgRef.current!!
 
         img.onload = {
             val missingChipsInStack = MAX_CHIPS_PER_STACK - props.numOfChip
