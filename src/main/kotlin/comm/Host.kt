@@ -55,7 +55,6 @@ class Host : Messenger<SessionId> {
                 c.send("Connection rejected")
                 println("Rejected a new connection")
             } else {
-                //remotes[c.id as String] = c
                 remotes[c.peer as String] = c
                 println("Connected to ${c.peer}")
                 ready(c)
@@ -111,7 +110,7 @@ class Host : Messenger<SessionId> {
                 remote.send(data)
                 println("Sent to $peer: $data")
             } else {
-                throw ConnectionClosedException("Cannot send because connection is closed")
+                throw ConnectionClosedException("Cannot send because connection is closed. peer=$peer remote=$remote")
             }
         }
     }
