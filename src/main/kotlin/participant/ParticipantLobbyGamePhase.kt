@@ -17,7 +17,7 @@ import shared.htmlAttrs
 
 fun RBuilder.participantLobbyGamePhase(
     connection: Messenger<SessionId>,
-    switchToPlayingPhaseFn: (initialTable: Table, firstAnte: Int) -> Unit
+    switchToPlayingPhaseFn: (initialTable: Table, firstAnte: Int, activePlayer: SessionId?) -> Unit
 ) =
     child(ParticipantLobbyGamePhase, jsObject {
         this.connection = connection
@@ -26,7 +26,7 @@ fun RBuilder.participantLobbyGamePhase(
 
 private external interface ParticipantLobbyGamePhaseProps : RProps {
     var connection: Messenger<SessionId>
-    var switchToPlayingPhaseFn: (initialTable: Table, firstAnte: Int) -> Unit
+    var switchToPlayingPhaseFn: (initialTable: Table, firstAnte: Int, activePlayer: SessionId?) -> Unit
 }
 
 private val ParticipantLobbyGamePhase = functionalComponent<ParticipantLobbyGamePhaseProps> { props ->
@@ -34,7 +34,7 @@ private val ParticipantLobbyGamePhase = functionalComponent<ParticipantLobbyGame
     useEffect(listOf()) {
         props.connection.receive(
             Messages.TotalGameReset.Type handledBy { (m) ->
-                props.switchToPlayingPhaseFn(m.yourTable, m.ante)
+                props.switchToPlayingPhaseFn(m.yourTable, m.ante, m.activePlayer)
             }
         )
     }

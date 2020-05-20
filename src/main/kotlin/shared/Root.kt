@@ -55,8 +55,8 @@ private sealed class GamePhase {
 
     class ParticipantLobby(private val connection: Messenger<SessionId>) : GamePhase() {
         override fun RBuilder.render(switchPhaseFn: (GamePhase) -> Unit) {
-            participantLobbyGamePhase(connection, switchToPlayingPhaseFn = { initialTable, firstAnte ->
-                switchPhaseFn(ParticipantPlaying(connection, initialTable, firstAnte))
+            participantLobbyGamePhase(connection, switchToPlayingPhaseFn = { initialTable, firstAnte, activePlayer ->
+                switchPhaseFn(ParticipantPlaying(connection, initialTable, activePlayer, firstAnte))
             })
         }
     }
@@ -64,11 +64,12 @@ private sealed class GamePhase {
     class ParticipantPlaying(
         private val connection: Messenger<SessionId>,
         private val initialTable: Table,
+        private val initialActivePlayer: SessionId?,
         private val firstAnte: Int
     ) : GamePhase() {
         override fun RBuilder.render(switchPhaseFn: (GamePhase) -> Unit) {
             //TODO firstAnte
-            participantPlayingGamePhase(initialTable, connection)
+            participantPlayingGamePhase(initialTable, initialActivePlayer, connection)
         }
     }
 
@@ -118,7 +119,7 @@ private sealed class GamePhase {
                 }
 
                 connections.sendDynamic { sid ->
-                    Messages.TotalGameReset(personalizedTables[sid]!!, gameSettings.ante).jsonMessage()
+                    Messages.TotalGameReset(personalizedTables[sid]!!, gameSettings.ante, connections.myPeerId).jsonMessage()
                 }
 
                 switchPhaseFn(HostPlaying(

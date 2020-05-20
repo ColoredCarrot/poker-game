@@ -27,7 +27,7 @@ object Messages : MessageTypeRegistry(
     //  Host to Participant
 
     @Serializable
-    data class TotalGameReset(val yourTable: Table, val ante: Int) : JsonMessageToken<TotalGameReset> {
+    data class TotalGameReset(val yourTable: Table, val ante: Int, val activePlayer: SessionId?) : JsonMessageToken<TotalGameReset> {
         override val jsonType get() = Type
 
         object Type : JsonMessage.Type<TotalGameReset>(serializer())

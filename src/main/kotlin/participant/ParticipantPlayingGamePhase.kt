@@ -30,21 +30,23 @@ import usingreact.GameProps
 import usingreact.game
 import kotlin.browser.window
 
-fun RBuilder.participantPlayingGamePhase(initialTable: Table, connection: Messenger<SessionId>) =
+fun RBuilder.participantPlayingGamePhase(initialTable: Table, initialActivePlayer: SessionId?, connection: Messenger<SessionId>) =
     child(ParticipantPlayingGamePhase, jsObject {
         this.initialTable = initialTable
+        this.initialActivePlayer = initialActivePlayer
         this.connection = connection
     })
 
 private external interface ParticipantPlayingGamePhaseProps : RProps {
     var initialTable: Table
+    var initialActivePlayer: SessionId?
     var connection: Messenger<SessionId>
 }
 
 private val ParticipantPlayingGamePhase = functionalComponent<ParticipantPlayingGamePhaseProps> { props ->
 
     var table by useState(props.initialTable)
-    var activePlayer by useState(props.initialTable.mySessionId)
+    var activePlayer by useState(props.initialActivePlayer)
     var amountToCall by useState(0)
 
     var recentAction by useState<Pair<RoundAction, SessionId>?>(null)

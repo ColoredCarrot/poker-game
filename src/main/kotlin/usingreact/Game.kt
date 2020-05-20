@@ -11,7 +11,7 @@ import shared.htmlAttrs
 
 data class GameProps(
     val table: Table,
-    val activePlayer: SessionId,
+    val activePlayer: SessionId?,
     val amountToCall: Int,
     val actionCenterCallbacks: ActionCenterCallbacks,
     val onHandReorder: (newOrder: List<Int>) -> Unit
