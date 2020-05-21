@@ -99,11 +99,14 @@ private val HostPlayingGamePhase = functionalComponent<HostPlayingGamePhaseProps
         props.connections.send(Messages.SetHands(table.allPlayers.associate { it.sessionId to it.hand!! }))
     }
 
-    val someoneRoundAction = { actor: SessionId, action: RoundAction ->
+    fun someoneRoundAction(actor: SessionId, action: RoundAction, newTable: Table, newRound: Round) {
+        // These are deferred operations, thus we need to operate on newTable/Round lest we use stale data
+        table = newTable
+        round = newRound
 
-        val nextRound = round.isFinished()
+        val nextRound = newRound.isFinished()
         if (nextRound) {
-            when (round.label) {
+            when (newRound.label) {
                 RoundLabel.PREFLOP -> {
                     // Reveal first three community cards (the flop)
                     revealCommunityCards(0, 3)
@@ -122,17 +125,17 @@ private val HostPlayingGamePhase = functionalComponent<HostPlayingGamePhaseProps
                     allRoundsHaveFinished()
                 }
             }
-            round.nextRound()
-            println("round was finished and is now = $round")
+            newRound.nextRound()
+            println("round was finished and is now = $newRound")
         }
 
         props.connections.send(
             Messages.UpdateRound(
-                amountToCall = round.amountToCall,
-                activePlayer = round.activePlayer.get(),
+                amountToCall = newRound.amountToCall,
+                activePlayer = newRound.activePlayer.get(),
                 updatedMoneyPlayer = actor,
-                updatedMoneyValue = table.allPlayers[actor].money.value,
-                pot = table.pot.value,
+                updatedMoneyValue = newTable.allPlayers[actor].money.value,
+                pot = newTable.pot.value,
                 reason = actor to action,
                 isNextRound = nextRound
             )
@@ -142,24 +145,31 @@ private val HostPlayingGamePhase = functionalComponent<HostPlayingGamePhaseProps
     }
 
     val someoneFold = { actor: SessionId ->
-        table = table.mapPlayer(actor) { it.copy(hasFolded = true) }
-
-        round = round.copy().also { it.advanceByFolding() }
-        someoneRoundAction(actor, RoundAction.Fold)
+        someoneRoundAction(
+            actor,
+            RoundAction.Fold,
+            newTable = table.mapPlayer(actor) { it.copy(hasFolded = true) },
+            newRound = round.copy().also { it.advanceByFolding() }
+        )
     }
     val someoneCall = { actor: SessionId ->
-        table = table.setPot { it + round.amountToCall }
-        table = table.mapPlayer(actor) { it.setMoney { it - round.amountToCall } }
-
-        round = round.copy().also { it.advanceByCalling() }
-        someoneRoundAction(actor, RoundAction.Call)
+        someoneRoundAction(
+            actor,
+            RoundAction.Call,
+            newTable = table
+                .setPot { it + round.amountToCall }
+                .mapPlayer(actor) { it.setMoney { it - round.amountToCall } },
+            newRound = round
+                .copy().also { it.advanceByCalling() }
+        )
     }
     val someoneRaise = { actor: SessionId, raiseAmount: Int ->
-        table = table.setPot { it + (round.amountToCall + raiseAmount) }
-        table = table.mapPlayer(actor) { it.setMoney { it - (round.amountToCall + raiseAmount) } }
-
-        round = round.copy().also { it.advanceByRaising(raiseAmount) }
-        someoneRoundAction(actor, RoundAction.Raise(raiseAmount))
+        val newTable = table
+            .setPot { it + (round.amountToCall + raiseAmount) }
+            .mapPlayer(actor) { it.setMoney { it - (round.amountToCall + raiseAmount) } }
+        val newRound = round
+            .copy().also { it.advanceByRaising(raiseAmount) }
+        someoneRoundAction(actor, RoundAction.Raise(raiseAmount), newTable, newRound)
     }
 
 

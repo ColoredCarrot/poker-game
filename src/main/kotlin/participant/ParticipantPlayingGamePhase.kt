@@ -30,7 +30,11 @@ import usingreact.GameProps
 import usingreact.game
 import kotlin.browser.window
 
-fun RBuilder.participantPlayingGamePhase(initialTable: Table, initialActivePlayer: SessionId?, connection: Messenger<SessionId>) =
+fun RBuilder.participantPlayingGamePhase(
+    initialTable: Table,
+    initialActivePlayer: SessionId?,
+    connection: Messenger<SessionId>
+) =
     child(ParticipantPlayingGamePhase, jsObject {
         this.initialTable = initialTable
         this.initialActivePlayer = initialActivePlayer
@@ -108,21 +112,25 @@ private val ParticipantPlayingGamePhase = functionalComponent<ParticipantPlaying
             amountToCall = amountToCall,
             actionCenterCallbacks = ActionCenterCallbacks(
                 foldFn = {
-                    table = table.setMyselfPlayerInfo { it.copy(hasFolded = true) }
-                    props.connection.send(Messages.PerformRoundAction(table.mySessionId, RoundAction.Fold))
+                    val newTable = table.setMyselfPlayerInfo { it.copy(hasFolded = true) }
+                    table = newTable
+                    props.connection.send(Messages.PerformRoundAction(newTable.mySessionId, RoundAction.Fold))
                 },
                 callFn = {
-                    table = table.setMyselfPlayerInfo { it.setMoney { money -> money - amountToCall } }
-                    table =
-                        table.setPot { it + amountToCall } // note: we just do this for the most fluid UX; it would automatically be done because we receive the update from the host as well
-                    props.connection.send(Messages.PerformRoundAction(table.mySessionId, RoundAction.Call))
+                    val newTable = table
+                        .setMyselfPlayerInfo { it.setMoney { money -> money - amountToCall } }
+                        .setPot { it + amountToCall } // note: we just do this for the most fluid UX; it would automatically be done because we receive the update from the host as well
+                    table = newTable
+                    props.connection.send(Messages.PerformRoundAction(newTable.mySessionId, RoundAction.Call))
                 },
                 raiseFn = { raiseAmount ->
-                    table = table.setMyselfPlayerInfo { it.setMoney { money -> money - (amountToCall + raiseAmount) } }
-                    table.setPot { pot -> pot + (amountToCall + raiseAmount) }
+                    val newTable = table
+                        .setMyselfPlayerInfo { it.setMoney { money -> money - (amountToCall + raiseAmount) } }
+                        .setPot { pot -> pot + (amountToCall + raiseAmount) }
+                    table = newTable
                     props.connection.send(
                         Messages.PerformRoundAction(
-                            table.mySessionId,
+                            newTable.mySessionId,
                             RoundAction.Raise(raiseAmount)
                         )
                     )
