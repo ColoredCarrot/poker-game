@@ -7,6 +7,7 @@ import org.w3c.dom.Image
 import react.RBuilder
 import react.RComponent
 import react.RProps
+import react.RPureComponent
 import react.RReadableRef
 import react.RState
 import react.dom.canvas
@@ -36,7 +37,7 @@ private external interface ChipsDisplayProps : RProps {
     var actualSizeMod: Double
 }
 
-private class ChipsDisplay : RComponent<ChipsDisplayProps, RState>() {
+private class ChipsDisplay : RPureComponent<ChipsDisplayProps, RState>() {
 
     override fun RBuilder.render() {
         div {
@@ -63,7 +64,7 @@ private external interface ChipStackProps : RProps {
     var actualSizeMod: Double
 }
 
-private class ChipStack : RComponent<ChipStackProps, RState>() {
+private class ChipStack : RPureComponent<ChipStackProps, RState>() {
 
     private lateinit var canvasRef: RReadableRef<HTMLCanvasElement>
     private lateinit var imgRef: RReadableRef<HTMLImageElement>

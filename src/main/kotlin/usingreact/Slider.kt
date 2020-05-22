@@ -4,8 +4,8 @@ import kotlinx.html.InputType
 import kotlinx.html.js.onInputFunction
 import org.w3c.dom.HTMLInputElement
 import react.RBuilder
-import react.RComponent
 import react.RProps
+import react.RPureComponent
 import react.RState
 import react.dom.input
 import react.dom.jsStyle
@@ -30,7 +30,7 @@ external interface SliderProps : RProps {
     var onChange: (Int) -> Unit
 }
 
-class Slider(props: SliderProps) : RComponent<SliderProps, RState>(props) {
+class Slider(props: SliderProps) : RPureComponent<SliderProps, RState>(props) {
     override fun RBuilder.render() {
         input(InputType.range, classes = "uk-range") {
             attrs {

@@ -5,8 +5,8 @@ import kotlinx.html.InputType
 import kotlinx.html.js.onSubmitFunction
 import org.w3c.dom.HTMLElement
 import react.RBuilder
-import react.RComponent
 import react.RProps
+import react.RPureComponent
 import react.RReadableRef
 import react.RState
 import react.dom.button
@@ -42,7 +42,7 @@ private external interface RaiseModalState : RState {
     var amountToRaise: Int
 }
 
-private class RaiseModal : RComponent<RaiseModalProps, RaiseModalState>() {
+private class RaiseModal : RPureComponent<RaiseModalProps, RaiseModalState>() {
 
     private lateinit var uiKitModalRef: RReadableRef<HTMLElement>
 

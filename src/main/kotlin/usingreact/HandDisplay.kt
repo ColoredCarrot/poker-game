@@ -4,8 +4,8 @@ import audio.SoundEffectGroups
 import kotlinx.html.classes
 import org.w3c.dom.HTMLElement
 import react.RBuilder
-import react.RComponent
 import react.RProps
+import react.RPureComponent
 import react.RReadableRef
 import react.RState
 import react.child
@@ -36,7 +36,7 @@ external interface HandDisplayProps : RProps {
     var requestHandReorderFn: (newOrder: List<Int>) -> Unit
 }
 
-private class HandDisplay : RComponent<HandDisplayProps, RState>() {
+private class HandDisplay : RPureComponent<HandDisplayProps, RState>() {
 
     private lateinit var directParentOfCardsRef: RReadableRef<HTMLElement>
 

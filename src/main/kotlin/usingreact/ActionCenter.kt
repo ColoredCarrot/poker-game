@@ -4,8 +4,8 @@ import kotlinx.html.classes
 import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
 import react.RBuilder
-import react.RComponent
 import react.RProps
+import react.RPureComponent
 import react.RState
 import react.dom.button
 import react.dom.div
@@ -56,7 +56,7 @@ private external interface ActionCenterState : RState {
     var raiseModalShown: Boolean
 }
 
-private class ActionCenter : RComponent<ActionCenterProps, ActionCenterState>() {
+private class ActionCenter : RPureComponent<ActionCenterProps, ActionCenterState>() {
     override fun ActionCenterState.init() {
         raiseModalShown = false
     }
