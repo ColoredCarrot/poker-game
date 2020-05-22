@@ -169,11 +169,12 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
             .mapPlayer(actor) { it.setMoney { it - (round.amountToCall + raiseAmount) } }
         val newRound = round
             .copy().also { it.advanceByRaising(raiseAmount) }
-        console.log("someoneRaise actor=$actor raiseAmount=$raiseAmount old table: ", table, " new table: ", newTable, " old round: ", round, " new round: ", newRound)
         someoneRoundAction(actor, RoundAction.Raise(raiseAmount), newTable, newRound)
     }
 
 
+    // Unfortunately, we cannot give an empty dependency list:
+    // The effect must run on every update because otherwise we'd use stale state.
     useEffect {
         props.connections.receive(
             Messages.PerformRoundAction.Type handledBy { (msg) ->
@@ -197,7 +198,8 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
                 callFn = { someoneCall(table.mySessionId) },
                 raiseFn = { someoneRaise(table.mySessionId, it) }
             ),
-            onHandReorder = { newOrder -> table = table.reorderMyHand(newOrder) }
+            onHandReorder = { newOrder -> table = table.reorderMyHand(newOrder) },
+            recentAction = null /*TODO recentAction for host. prolly best to add a showRecentAction state to Game instead of duplicating that logic*/
         )
     )
 }

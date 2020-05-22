@@ -131,3 +131,5 @@ inline fun RDOMBuilder<*>.attrsApplyStyle(styler: dynamic.() -> Unit) {
     @Suppress("UnsafeCastFromDynamic")
     attrs["style"] = jsObject(styler)
 }
+
+fun <A, B> Pair<A, B>.swap() = second to first

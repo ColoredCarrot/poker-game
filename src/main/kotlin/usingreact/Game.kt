@@ -4,17 +4,20 @@ import react.RBuilder
 import react.RProps
 import react.dom.div
 import reactutils.functionalComponentEx
+import shared.RoundAction
 import shared.SessionId
 import shared.Table
 import shared.attrsApplyStyle
 import shared.htmlAttrs
+import shared.swap
 
 data class GameProps(
     val table: Table,
     val activePlayer: SessionId?,
     val amountToCall: Int,
     val actionCenterCallbacks: ActionCenterCallbacks,
-    val onHandReorder: (newOrder: List<Int>) -> Unit
+    val onHandReorder: (newOrder: List<Int>) -> Unit,
+    val recentAction: Pair<RoundAction, SessionId>?
 ) : RProps
 
 val GameProps.myself get() = table.myself.playerInfo
@@ -42,8 +45,7 @@ private val Game = functionalComponentEx<GameProps>("Game") { props ->
 
         myselfComponent(props.table.myself, props.onHandReorder)
 
-        //TODO recentAction
-        otherPlayers(props.table.otherPlayers, props.table.winners, props.activePlayer, null)
+        otherPlayers(props.table.otherPlayers, props.table.winners, props.activePlayer, props.recentAction?.swap())
 
     }
 

@@ -134,7 +134,8 @@ private val ParticipantPlayingGamePhase =
                             .send(Messages.PerformRoundAction(newTable.mySessionId, RoundAction.Raise(raiseAmount)))
                     }
                 ),
-                onHandReorder = { table = table.reorderMyHand(it) }
+                onHandReorder = { table = table.reorderMyHand(it) },
+                recentAction = recentAction
             )
         )
     }
