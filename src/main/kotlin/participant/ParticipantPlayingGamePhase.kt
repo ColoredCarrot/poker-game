@@ -57,7 +57,7 @@ private val ParticipantPlayingGamePhase =
         var recentAction by useState<Pair<RoundAction, SessionId>?>(null)
         //TODO actually render recentAction by giving it as prop to OtherPlayers
 
-        useEffectWithCleanup(dependencies = emptyList()) {
+        useEffectWithCleanup {
             // We have mounted!
             // Let's register our listeners
             // TODO: since the effect hook is only run after painting, this might be too late and we might miss some messages.
@@ -77,8 +77,9 @@ private val ParticipantPlayingGamePhase =
                 Messages.UpdateRound.Type handledBy { (m) ->
                     amountToCall = m.amountToCall
                     activePlayer = m.activePlayer
-                    table = table.mapPlayer(m.updatedMoneyPlayer) { it.setMoney { it.setValue(m.updatedMoneyValue) } }
-                    table = table.setPot { it.setValue(m.pot) }
+                    table = table
+                        .mapPlayer(m.updatedMoneyPlayer) { it.setMoney { it.setValue(m.updatedMoneyValue) } }
+                        .setPot { it.setValue(m.pot) }
 
                     val (actor, action) = m.reason
                     if (actor != table.mySessionId) {
@@ -100,7 +101,7 @@ private val ParticipantPlayingGamePhase =
                 props.connection.receive()
 
                 // Also clear timeout
-                clearRecentActionTimeout?.also { window.clearTimeout(it) }
+                clearRecentActionTimeout?.also { window.clearTimeout(it); recentAction = null }
             }
         }
 

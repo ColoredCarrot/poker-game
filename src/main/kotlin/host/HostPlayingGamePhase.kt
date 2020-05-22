@@ -100,10 +100,6 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
     }
 
     fun someoneRoundAction(actor: SessionId, action: RoundAction, newTable: Table, newRound: Round) {
-        // These are deferred operations, thus we need to operate on newTable/Round lest we use stale data
-        table = newTable
-        round = newRound
-
         val nextRound = newRound.isFinished()
         if (nextRound) {
             when (newRound.label) {
@@ -128,6 +124,10 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
             newRound.nextRound()
             println("round was finished and is now = $newRound")
         }
+
+        // These are deferred operations, thus we need to operate on newTable/Round lest we use stale data
+        table = newTable
+        round = newRound
 
         props.connections.send(
             Messages.UpdateRound(
@@ -169,11 +169,12 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
             .mapPlayer(actor) { it.setMoney { it - (round.amountToCall + raiseAmount) } }
         val newRound = round
             .copy().also { it.advanceByRaising(raiseAmount) }
+        console.log("someoneRaise actor=$actor raiseAmount=$raiseAmount old table: ", table, " new table: ", newTable, " old round: ", round, " new round: ", newRound)
         someoneRoundAction(actor, RoundAction.Raise(raiseAmount), newTable, newRound)
     }
 
 
-    useEffect(dependencies = emptyList()) {
+    useEffect {
         props.connections.receive(
             Messages.PerformRoundAction.Type handledBy { (msg) ->
                 when (val action = msg.action) {
