@@ -18,6 +18,7 @@ data class GameProps(
 ) : RProps
 
 val GameProps.myself get() = table.myself.playerInfo
+val GameProps.mySessionId get() = myself.sessionId
 
 fun RBuilder.game(props: GameProps) = child(Game, props) {}
 
@@ -30,8 +31,8 @@ private val Game = functionalComponentEx<GameProps>("Game") { props ->
         actionCenter(
             props.myself.money.value,
             props.amountToCall,
-            enableActivePlayerControls = props.activePlayer == props.myself.sessionId,
-            youWin = false,
+            enableActivePlayerControls = props.mySessionId == props.activePlayer,
+            youWin = props.mySessionId in props.table.winners,
             callbacks = props.actionCenterCallbacks
         )
 
@@ -41,7 +42,8 @@ private val Game = functionalComponentEx<GameProps>("Game") { props ->
 
         myselfComponent(props.table.myself, props.onHandReorder)
 
-        //TODO otherPlayers.addToDOM(this@renderToBody)
+        //TODO recentAction
+        otherPlayers(props.table.otherPlayers, props.table.winners, props.activePlayer, null)
 
     }
 

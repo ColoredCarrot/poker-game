@@ -67,6 +67,11 @@ fun Offsets.toStyleString() = buildString {
     append(':').append(y).append("vh;")
 }
 
+fun Offsets.applyStyle(style: dynamic) = with(style) {
+    if (rightAligned) right = "${x}vw" else left = "${x}vw"
+    if (bottomAligned) bottom = "${y}vh" else top = "${y}vh"
+}
+
 @Suppress("unused")
 inline fun <reified T : Element?> Document.elementById(id: String) = object : ReadOnlyProperty<Any?, T> {
     override fun getValue(thisRef: Any?, property: KProperty<*>): T {
