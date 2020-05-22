@@ -3,6 +3,7 @@ package usingreact
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.HTMLImageElement
+import org.w3c.dom.Image
 import react.RBuilder
 import react.RComponent
 import react.RProps
@@ -13,7 +14,6 @@ import react.dom.div
 import react.dom.img
 import shared.Chips
 import vendor.createRef
-import vendor.findDOMNode
 import kotlin.browser.document
 
 private fun guessViewportSizeMod(): Double {
@@ -86,6 +86,14 @@ private class ChipStack : RComponent<ChipStackProps, RState>() {
     }
 
     override fun componentDidMount() {
+        paint()
+    }
+
+    override fun componentDidUpdate(prevProps: ChipStackProps, prevState: RState, snapshot: Any) {
+        paint()
+    }
+
+    private fun paint() {
         val canvas = canvasRef.current!!
 
         canvas.width = (CHIP_STACK_WIDTH * props.actualSizeMod).toInt()
@@ -94,7 +102,10 @@ private class ChipStack : RComponent<ChipStackProps, RState>() {
         val ctx = canvas.getContext("2d") as CanvasRenderingContext2D
         val img = imgRef.current!!
 
-        img.onload = {
+        // Use a proxy image so that onload is triggered even if already loaded
+        val proxyImg = Image()
+        proxyImg.addEventListener("load", {
+            ctx.clearRect(0.0, 0.0, canvas.width.toDouble(), canvas.height.toDouble())
             val missingChipsInStack = MAX_CHIPS_PER_STACK - props.numOfChip
             for (i in (props.numOfChip - 1) downTo 0) {
                 ctx.drawImage(
@@ -105,7 +116,8 @@ private class ChipStack : RComponent<ChipStackProps, RState>() {
                     CHIP_STACK_SINGLE_HEIGHT.toDouble() * props.actualSizeMod
                 )
             }
-        }
+        })
+        proxyImg.src = img.src
     }
 }
 
