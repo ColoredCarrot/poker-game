@@ -16,7 +16,6 @@ import shared.ConcreteCard
 import shared.Hand
 import shared.UIkit
 import shared.attrsApplyStyle
-import kotlin.browser.window
 
 fun RBuilder.handDisplay(
     hand: Hand,
@@ -70,7 +69,8 @@ private class HandDisplay : RPureComponent<HandDisplayProps, RState>() {
         // Match height of all cards to actual height of first card (or width, doesn't really matter, right?)
         val divWithDivsWithImgs = directParentOfCards
 
-        //FIXME why tf does this need to be in a timeout
+        //TODO this appears to diminish image resolution or quality or something... what is going on??
+        /*//FIXME why tf does this need to be in a timeout
         window.setTimeout({
             val heightOfFirst = divWithDivsWithImgs.firstElementChild?.clientHeight
             if (heightOfFirst != null) {
@@ -84,7 +84,7 @@ private class HandDisplay : RPureComponent<HandDisplayProps, RState>() {
                     sibling = sibling.nextElementSibling
                 }
             }
-        }, 300)
+        }, 300)*/
 
         UIkit.util.on(divWithDivsWithImgs, "moved") {
             println("Card moved")
