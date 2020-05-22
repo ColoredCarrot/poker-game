@@ -13,15 +13,15 @@ import participant.participantPlayingGamePhase
 import react.RBuilder
 import react.RProps
 import react.child
-import react.functionalComponent
 import react.getValue
 import react.setValue
 import react.useState
+import reactutils.functionalComponentEx
 import kotlin.random.Random
 
 fun RBuilder.poker() = child(Root)
 
-private val Root = functionalComponent<RProps> {
+private val Root = functionalComponentEx<RProps>("Root") {
     var phase by useState<GamePhase> { GamePhase.Welcome }
 
     val switchPhaseFn = { newPhase: GamePhase -> phase = newPhase }

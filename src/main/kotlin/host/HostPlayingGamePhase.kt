@@ -8,11 +8,11 @@ import kotlinext.js.jsObject
 import react.RBuilder
 import react.RProps
 import react.child
-import react.functionalComponent
 import react.getValue
 import react.setValue
 import react.useEffect
 import react.useState
+import reactutils.functionalComponentEx
 import shared.Card
 import shared.ConcreteCard
 import shared.Hand
@@ -54,7 +54,7 @@ private external interface HostPlayingGamePhaseProps : RProps {
     var initialTable: Table
 }
 
-private val HostPlayingGamePhase = functionalComponent<HostPlayingGamePhaseProps> { props ->
+private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhaseProps>("HostPlayingGamePhase") { props ->
 
     var round by useState {
         val roundTable = RoundTable(listOf(props.connections.myPeerId) + props.connections.peers())

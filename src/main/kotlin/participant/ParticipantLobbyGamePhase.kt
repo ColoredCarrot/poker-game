@@ -9,8 +9,8 @@ import react.RProps
 import react.child
 import react.dom.div
 import react.dom.p
-import react.functionalComponent
 import react.useEffect
+import reactutils.functionalComponentEx
 import shared.SessionId
 import shared.Table
 import shared.htmlAttrs
@@ -29,19 +29,20 @@ private external interface ParticipantLobbyGamePhaseProps : RProps {
     var switchToPlayingPhaseFn: (initialTable: Table, firstAnte: Int, activePlayer: SessionId?) -> Unit
 }
 
-private val ParticipantLobbyGamePhase = functionalComponent<ParticipantLobbyGamePhaseProps> { props ->
+private val ParticipantLobbyGamePhase =
+    functionalComponentEx<ParticipantLobbyGamePhaseProps>("ParticipantLobbyGamePhase") { props ->
 
-    useEffect(listOf()) {
-        props.connection.receive(
-            Messages.TotalGameReset.Type handledBy { (m) ->
-                props.switchToPlayingPhaseFn(m.yourTable, m.ante, m.activePlayer)
-            }
-        )
+        useEffect(listOf()) {
+            props.connection.receive(
+                Messages.TotalGameReset.Type handledBy { (m) ->
+                    props.switchToPlayingPhaseFn(m.yourTable, m.ante, m.activePlayer)
+                }
+            )
+        }
+
+        div("uk-container primary-container") {
+            htmlAttrs["uk-height-viewport"] = ""
+
+            p { +"Waiting for game to start..." }
+        }
     }
-
-    div("uk-container primary-container") {
-        htmlAttrs["uk-height-viewport"] = ""
-
-        p { +"Waiting for game to start..." }
-    }
-}

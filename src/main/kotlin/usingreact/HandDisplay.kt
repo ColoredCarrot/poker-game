@@ -11,7 +11,7 @@ import react.RState
 import react.child
 import react.dom.div
 import react.dom.img
-import react.functionalComponent
+import reactutils.functionalComponentEx
 import shared.ConcreteCard
 import shared.Hand
 import shared.UIkit
@@ -122,7 +122,7 @@ private external interface CardDisplayProps : RProps {
     var index: Int
 }
 
-private val CardDisplay = functionalComponent<CardDisplayProps> { props ->
+private val CardDisplay = functionalComponentEx<CardDisplayProps>("CardDisplay") { props ->
     val card = props.concreteCard.card
     img(alt = card.displayName, classes = "poker-hand") {
         attrs {

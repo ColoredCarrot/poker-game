@@ -3,12 +3,8 @@ package shared
 import kotlinext.js.jsObject
 import kotlinx.html.InputType
 import kotlinx.html.js.onClickFunction
-import kotlinx.html.js.onKeyDownFunction
-import kotlinx.html.js.onKeyPressFunction
 import kotlinx.html.js.onKeyUpFunction
 import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.events.Event
-import org.w3c.dom.events.KeyboardEvent
 import react.RBuilder
 import react.RProps
 import react.child
@@ -17,7 +13,7 @@ import react.dom.div
 import react.dom.input
 import react.dom.label
 import react.dom.p
-import react.functionalComponent
+import reactutils.functionalComponentEx
 
 fun RBuilder.welcomeGamePhase(enterGameFn: (String) -> Unit, hostGameFn: () -> Unit) =
     child(WelcomeGamePhase, jsObject {
@@ -30,7 +26,7 @@ private external interface WelcomeGamePhaseProps : RProps {
     var hostGameFn: () -> Unit
 }
 
-private val WelcomeGamePhase = functionalComponent<WelcomeGamePhaseProps> { props ->
+private val WelcomeGamePhase = functionalComponentEx<WelcomeGamePhaseProps>("WelcomeGamePhase") { props ->
     div {
         p {
             +"Enter a game ID and press Enter to join a game. Alternatively, you can also "

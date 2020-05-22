@@ -4,7 +4,7 @@ import react.RBuilder
 import react.RProps
 import react.child
 import react.dom.div
-import react.functionalComponent
+import reactutils.functionalComponentEx
 import shared.PrivateGameState
 
 fun RBuilder.myselfComponent(
@@ -22,7 +22,7 @@ private external interface MyselfComponentProps : RProps {
     var onHandReorder: (newOrder: List<Int>) -> Unit
 }
 
-private val MyselfComponent = functionalComponent<MyselfComponentProps> { props ->
+private val MyselfComponent = functionalComponentEx<MyselfComponentProps>("Myself") { props ->
 
     div("uk-position-bottom-center poker-my-hand-container") {
         chipsDisplay(props.myself.playerInfo.money, MY_MONEY_RENDER_SIZE_MOD)

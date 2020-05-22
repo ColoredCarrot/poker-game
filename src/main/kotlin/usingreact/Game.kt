@@ -3,7 +3,7 @@ package usingreact
 import react.RBuilder
 import react.RProps
 import react.dom.div
-import react.functionalComponent
+import reactutils.functionalComponentEx
 import shared.SessionId
 import shared.Table
 import shared.attrsApplyStyle
@@ -21,7 +21,7 @@ val GameProps.myself get() = table.myself.playerInfo
 
 fun RBuilder.game(props: GameProps) = child(Game, props) {}
 
-private val Game = functionalComponent<GameProps> { props ->
+private val Game = functionalComponentEx<GameProps>("Game") { props ->
 
     div("uk-background-cover uk-background-center-center") {
         attrsApplyStyle { backgroundImage = "url(table.svg)" }

@@ -8,11 +8,11 @@ import react.RProps
 import react.child
 import react.dom.a
 import react.dom.p
-import react.functionalComponent
 import react.getValue
 import react.setValue
 import react.useEffect
 import react.useState
+import reactutils.functionalComponentEx
 
 fun RBuilder.hostLobbyGamePhase(connections: Host, switchToPlayingPhaseFn: () -> Unit) =
     child(HostLobbyGamePhase, jsObject {
@@ -25,7 +25,7 @@ private external interface HostLobbyGamePhaseProps : RProps {
     var switchToPlayingPhaseFn: () -> Unit
 }
 
-private val HostLobbyGamePhase = functionalComponent<HostLobbyGamePhaseProps> { props ->
+private val HostLobbyGamePhase = functionalComponentEx<HostLobbyGamePhaseProps>("HostLobbyGamePhase") { props ->
 
     var playersCount by useState(1)
 
