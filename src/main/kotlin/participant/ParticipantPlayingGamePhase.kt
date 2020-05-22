@@ -128,12 +128,8 @@ private val ParticipantPlayingGamePhase = functionalComponent<ParticipantPlaying
                         .setMyselfPlayerInfo { it.setMoney { money -> money - (amountToCall + raiseAmount) } }
                         .setPot { pot -> pot + (amountToCall + raiseAmount) }
                     table = newTable
-                    props.connection.send(
-                        Messages.PerformRoundAction(
-                            newTable.mySessionId,
-                            RoundAction.Raise(raiseAmount)
-                        )
-                    )
+                    props.connection
+                        .send(Messages.PerformRoundAction(newTable.mySessionId, RoundAction.Raise(raiseAmount)))
                 }
             ),
             onHandReorder = { table = table.reorderMyHand(it) }
