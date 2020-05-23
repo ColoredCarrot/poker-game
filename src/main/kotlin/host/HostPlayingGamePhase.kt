@@ -199,7 +199,7 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
                 raiseFn = { someoneRaise(table.mySessionId, it) }
             ),
             onHandReorder = { newOrder -> table = table.reorderMyHand(newOrder) },
-            recentAction = null /*TODO recentAction for host. prolly best to add a showRecentAction state to Game instead of duplicating that logic*/
+            lastAction = null /*TODO recentAction for host. prolly best to add a showRecentAction state to Game instead of duplicating that logic*/
         )
     )
 }

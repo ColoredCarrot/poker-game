@@ -3,6 +3,10 @@ package usingreact
 import react.RBuilder
 import react.RProps
 import react.dom.div
+import react.getValue
+import react.setValue
+import react.useEffectWithCleanup
+import react.useState
 import reactutils.functionalComponentEx
 import shared.RoundAction
 import shared.SessionId
@@ -10,6 +14,7 @@ import shared.Table
 import shared.attrsApplyStyle
 import shared.htmlAttrs
 import shared.swap
+import kotlin.browser.window
 
 data class GameProps(
     val table: Table,
@@ -17,7 +22,7 @@ data class GameProps(
     val amountToCall: Int,
     val actionCenterCallbacks: ActionCenterCallbacks,
     val onHandReorder: (newOrder: List<Int>) -> Unit,
-    val recentAction: Pair<RoundAction, SessionId>?
+    val lastAction: Pair<RoundAction, SessionId>?
 ) : RProps
 
 val GameProps.myself get() = table.myself.playerInfo
@@ -26,6 +31,22 @@ val GameProps.mySessionId get() = myself.sessionId
 fun RBuilder.game(props: GameProps) = child(Game, props) {}
 
 private val Game = functionalComponentEx<GameProps>("Game") { props ->
+
+    var showLastAction by useState(false)
+
+    useEffectWithCleanup(listOf(props.lastAction)) {
+        showLastAction = true
+
+        var clearShowLastActionHandle: Int?
+        clearShowLastActionHandle = window.setTimeout({
+            showLastAction = false
+            clearShowLastActionHandle = null
+        }, SHOW_RECENT_ACTION_FOR_MS)
+
+        return@useEffectWithCleanup {
+            clearShowLastActionHandle?.also { window.clearTimeout(it); showLastAction = false }
+        }
+    }
 
     div("uk-background-cover uk-background-center-center") {
         attrsApplyStyle { backgroundImage = "url(table.svg)" }
@@ -45,8 +66,13 @@ private val Game = functionalComponentEx<GameProps>("Game") { props ->
 
         myselfComponent(props.table.myself, props.onHandReorder)
 
-        otherPlayers(props.table.otherPlayers, props.table.winners, props.activePlayer, props.recentAction?.swap())
+        otherPlayers(
+            props.table.otherPlayers, props.table.winners, props.activePlayer,
+            props.lastAction?.takeIf { showLastAction }?.swap()
+        )
 
     }
 
 }
+
+private const val SHOW_RECENT_ACTION_FOR_MS = 2000

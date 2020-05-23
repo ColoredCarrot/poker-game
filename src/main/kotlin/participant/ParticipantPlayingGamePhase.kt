@@ -28,7 +28,6 @@ import shared.setPot
 import usingreact.ActionCenterCallbacks
 import usingreact.GameProps
 import usingreact.game
-import kotlin.browser.window
 
 fun RBuilder.participantPlayingGamePhase(
     initialTable: Table,
@@ -54,16 +53,13 @@ private val ParticipantPlayingGamePhase =
         var activePlayer by useState(props.initialActivePlayer)
         var amountToCall by useState(0)
 
-        var recentAction by useState<Pair<RoundAction, SessionId>?>(null)
-        //TODO actually render recentAction by giving it as prop to OtherPlayers
+        var lastAction by useState<Pair<RoundAction, SessionId>?>(null)
 
         useEffectWithCleanup {
             // We have mounted!
             // Let's register our listeners
             // TODO: since the effect hook is only run after painting, this might be too late and we might miss some messages.
             //  Possible solution: send confirmation to host here
-
-            var clearRecentActionTimeout: Int? = null
 
             props.connection.receive(
                 Messages.SetHands.Type handledBy { (m) ->
@@ -83,11 +79,7 @@ private val ParticipantPlayingGamePhase =
 
                     val (actor, action) = m.reason
                     if (actor != table.mySessionId) {
-                        recentAction = action to actor
-                        clearRecentActionTimeout = window.setTimeout({
-                            recentAction = null
-                            clearRecentActionTimeout = null
-                        }, 2000)
+                        lastAction = action to actor
                     }
 
                     if (m.isNextRound) {
@@ -99,9 +91,6 @@ private val ParticipantPlayingGamePhase =
             return@useEffectWithCleanup {
                 // Cleanup! Remove our listeners
                 props.connection.receive()
-
-                // Also clear timeout
-                clearRecentActionTimeout?.also { window.clearTimeout(it); recentAction = null }
             }
         }
 
@@ -135,7 +124,7 @@ private val ParticipantPlayingGamePhase =
                     }
                 ),
                 onHandReorder = { table = table.reorderMyHand(it) },
-                recentAction = recentAction
+                lastAction = lastAction
             )
         )
     }
