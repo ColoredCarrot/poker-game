@@ -16,7 +16,7 @@ import kotlin.browser.window
 
 class Host : Messenger<SessionId> {
 
-    private val myself = js("new Peer(null, { debug: 2 })")
+    private val myself = PeerJS.createPeer()
 
     private var remotes = LinkedHashMap<String, dynamic>(4)
 

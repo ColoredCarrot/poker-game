@@ -10,7 +10,7 @@ import toImplicitBoolean
 // Opposite of Host
 class Participant : Messenger<SessionId> {
 
-    private var myself = js("new Peer(null, { debug: 2 })")
+    private var myself = PeerJS.createPeer()
     private var host: dynamic = null
     private var hostId: SessionId? = null
 
