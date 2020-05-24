@@ -11,6 +11,7 @@ import react.child
 import react.getValue
 import react.setValue
 import react.useEffect
+import react.useEffectWithCleanup
 import react.useState
 import reactutils.functionalComponentEx
 import shared.Card
@@ -68,6 +69,8 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
 
     var table by useState(props.initialTable)
 
+    var lastAction by useState<Pair<RoundAction, SessionId>?>(null)
+
 
     val allRoundsHaveFinished = {
         println("allRoundsHaveFinished()")
@@ -100,6 +103,8 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
     }
 
     fun someoneRoundAction(actor: SessionId, action: RoundAction, newTable: Table, newRound: Round) {
+        lastAction = if (actor != newTable.mySessionId) action to actor else null
+
         val nextRound = newRound.isFinished()
         if (nextRound) {
             when (newRound.label) {
@@ -175,7 +180,7 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
 
     // Unfortunately, we cannot give an empty dependency list:
     // The effect must run on every update because otherwise we'd use stale state.
-    useEffect {
+    useEffectWithCleanup {
         props.connections.receive(
             Messages.PerformRoundAction.Type handledBy { (msg) ->
                 when (val action = msg.action) {
@@ -185,6 +190,10 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
                 }
             }
         )
+
+        return@useEffectWithCleanup {
+            props.connections.receive()
+        }
     }
 
 
@@ -199,7 +208,7 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
                 raiseFn = { someoneRaise(table.mySessionId, it) }
             ),
             onHandReorder = { newOrder -> table = table.reorderMyHand(newOrder) },
-            lastAction = null /*TODO recentAction for host. prolly best to add a showRecentAction state to Game instead of duplicating that logic*/
+            lastAction = lastAction
         )
     )
 }
