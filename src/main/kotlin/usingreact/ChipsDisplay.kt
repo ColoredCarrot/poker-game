@@ -16,14 +16,17 @@ import react.dom.img
 import shared.Chips
 import vendor.createRef
 import kotlin.browser.document
+import kotlin.math.min
 
 private fun guessViewportSizeMod(): Double {
     val vw = document.documentElement!!.clientWidth
+    val vh = document.documentElement!!.clientHeight
+    val vmin = min(vw, vh)
     return when {
-        vw >= 1600 -> 1.0
-        vw >= 1200 -> 0.8
-        vw >= 960 -> 0.5
-        else -> 0.3
+        vmin >= 1600 -> 1.0
+        vmin >= 1200 -> 0.8
+        vmin >= 960 -> 0.6
+        else -> 0.5
     }
 }
 
