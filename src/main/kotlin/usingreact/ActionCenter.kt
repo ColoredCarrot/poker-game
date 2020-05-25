@@ -1,5 +1,7 @@
 package usingreact
 
+import audio.SoundEffects
+import kotlinext.js.jsObject
 import kotlinx.html.classes
 import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
@@ -108,11 +110,27 @@ private class ActionCenter : RPureComponent<ActionCenterProps, ActionCenterState
                 setState { raiseModalShown = false }
                 props.raiseFn(raiseAmount)
             }
+
+            confetti(props.youWin, CONFETTI_CFG) {
+                SoundEffects.WIN.play()
+                SoundEffects.APPLAUSE.play()
+            }
         }
     }
 
-    override fun componentDidUpdate(prevProps: ActionCenterProps, prevState: ActionCenterState, snapshot: Any) {
-        //TODO renderWinCelebration
+    companion object {
+        private val CONFETTI_CFG = jsObject<dynamic>() {
+            angle = "90"
+            spread = "200"
+            startVelocity = "37"
+            elementCount = "150"
+            dragFriction = "0.05"
+            duration = "5000"
+            stagger = "0"
+            width = "16px"
+            height = "16px"
+            colors = js("""["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]""")
+        }
     }
 }
 
