@@ -3,6 +3,13 @@ package shared
 import kotlinx.serialization.Serializable
 
 // https://www.youtube.com/watch?v=CpSewSHZhmo
+/**
+ * Note: at the start of a round,
+ * the first active player must either bet or check.
+ * These actions are not represented by their own methods
+ * but rather the existing [advanceByRaising] and [advanceByFolding];
+ * calling [advanceByCalling] as the first action is undefined behaviour.
+ */
 @Serializable
 data class Round(
     // never to be modified
@@ -45,15 +52,18 @@ data class Round(
     }
 
     fun advanceByRaising(raise: Int) {
-        lastPlayerWhoRaised = activePlayer
-        amountToCall += raise
+        val me = activePlayer
         advanceActivePlayer()
+        lastPlayerWhoRaised = me
+        amountToCall += raise
     }
 
     private fun advanceActivePlayer() {
-        activePlayer = roundTable.next(activePlayer)
+        activePlayer = activePlayer.next()
         if (activePlayer == lastPlayerWhoRaised) {
             amountToCall = 0
+        } else while (activePlayer in folded) {
+            activePlayer = activePlayer.next()
         }
     }
 
