@@ -2,10 +2,6 @@ body {
     overflow: hidden;
 }
 
-div.primary-container {
-    background-color: #ffc2b9;
-}
-
 .poker-pot-container {
     width: 40%;
     margin-top: -5vh;

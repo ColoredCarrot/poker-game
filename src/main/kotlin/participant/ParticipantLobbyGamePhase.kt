@@ -1,22 +1,22 @@
 package participant
 
+import comm.Participant
 import comm.msg.Messages
-import comm.msg.Messenger
 import comm.msg.handledBy
 import kotlinext.js.jsObject
 import react.RBuilder
 import react.RProps
 import react.child
-import react.dom.div
+import react.dom.h1
 import react.dom.p
 import react.useEffectWithCleanup
 import reactutils.functionalComponentEx
 import shared.SessionId
 import shared.Table
-import shared.htmlAttrs
+import usingreact.lobbyContainer
 
 fun RBuilder.participantLobbyGamePhase(
-    connection: Messenger<SessionId>,
+    connection: Participant,
     switchToPlayingPhaseFn: (initialTable: Table, firstAnte: Int, activePlayer: SessionId?) -> Unit
 ) =
     child(ParticipantLobbyGamePhase, jsObject {
@@ -25,7 +25,7 @@ fun RBuilder.participantLobbyGamePhase(
     })
 
 private external interface ParticipantLobbyGamePhaseProps : RProps {
-    var connection: Messenger<SessionId>
+    var connection: Participant
     var switchToPlayingPhaseFn: (initialTable: Table, firstAnte: Int, activePlayer: SessionId?) -> Unit
 }
 
@@ -44,8 +44,8 @@ private val ParticipantLobbyGamePhase =
             }
         }
 
-        div("uk-container primary-container") {
-            htmlAttrs["uk-height-viewport"] = ""
+        lobbyContainer {
+            h1 { +"Join Game" }
 
             p { +"Waiting for game to start..." }
         }

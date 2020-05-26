@@ -53,7 +53,7 @@ private sealed class GamePhase {
         }
     }
 
-    class ParticipantLobby(private val connection: Messenger<SessionId>) : GamePhase() {
+    class ParticipantLobby(private val connection: Participant) : GamePhase() {
         override fun RBuilder.render(switchPhaseFn: (GamePhase) -> Unit) {
             participantLobbyGamePhase(connection, switchToPlayingPhaseFn = { initialTable, firstAnte, activePlayer ->
                 switchPhaseFn(ParticipantPlaying(connection, initialTable, activePlayer, firstAnte))
