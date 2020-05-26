@@ -42,4 +42,14 @@ object PeerJS {
         init.path = path
     }
 
+    @JsName("switchToLocalhost")
+    fun switchToLocalhost() {
+        init = LOCALHOST_INIT
+    }
+
+    @JsName("switchToPeerJSCloud")
+    fun switchToPeerJSCloud() {
+        init = PEERJS_CLOUD_INIT
+    }
+
 }
