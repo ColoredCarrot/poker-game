@@ -4,15 +4,9 @@ import comm.msg.Message
 import comm.msg.MessageHandler
 import comm.msg.MessageTypeRegistry
 import comm.msg.Messenger
-import kotlinx.html.dom.append
-import kotlinx.html.js.br
-import kotlinx.html.js.p
-import org.w3c.dom.url.URLSearchParams
+import shared.PNotify
 import shared.SessionId
-import shared.modifyURLSearchParams
 import toImplicitBoolean
-import kotlin.browser.document
-import kotlin.browser.window
 
 class Host : Messenger<SessionId> {
 
@@ -33,21 +27,14 @@ class Host : Messenger<SessionId> {
 
     fun iteratePeers() = (remotes as Map<String, dynamic>).keys.iterator()
 
+    val hook = Hook()
+
     init {
         // Connect to server callback
-        myself.on("open") { id: dynamic ->
+        myself.on("open") { id: String ->
             println("ID: $id. Awaiting connections...")
-            myPeerId = id as String
-            document.body!!.append {
-                br()
-                p { +"Your game ID: $id" }
-                br()
-                // Create direct link
-                val directLink = modifyURLSearchParams(window.location.href) {
-                    it.append("game", id)
-                }
-                p { +"Direct link: $directLink" }
-            }
+            myPeerId = id
+            hook.open.notify(id)
         }
 
         myself.on("connection") { c: dynamic ->
@@ -62,7 +49,10 @@ class Host : Messenger<SessionId> {
         }
 
         myself.on("disconnected") {
-            println("Connection lost")
+            // Disconnected from server
+            // Could reconnect using myself.reconnect()
+            println("Disconnected from server")
+            hook.close.notify { myself.reconnect(); Unit }
         }
 
         myself.on("close") {
@@ -71,7 +61,8 @@ class Host : Messenger<SessionId> {
         }
 
         myself.on("error") { err: dynamic ->
-            println("error: $err")
+            console.log("Peer error: $err ", err)
+            hook.error.notify(err)
         }
     }
 
@@ -147,4 +138,32 @@ class Host : Messenger<SessionId> {
         handler(msg as X)
     }
 
+    class Hook {
+        /**
+         * Called when the connection to the peer server is opened.
+         *
+         * The argument is our peer ID.
+         */
+        val open = PNotify<String>()
+
+        /**
+         * Called when the connection to the peer server is closed,
+         * either manually or because it was lost.
+         *
+         * Already established connections are maintained,
+         * but new ones cannot be brokered.
+         *
+         * The argument is a function that, when called,
+         * attempts to reconnect to the server.
+         */
+        val close = PNotify<() -> Unit>()
+
+        val error = PNotify<dynamic>()
+
+        fun clearHandlers() {
+            open.handle {}
+            close.handle {}
+            error.handle {}
+        }
+    }
 }

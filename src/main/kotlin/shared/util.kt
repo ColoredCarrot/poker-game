@@ -100,6 +100,24 @@ class Notify {
 
 }
 
+class PNotify<D : Any> {
+
+    private var notified: D? = null
+    private var handler: (D) -> Unit = {}
+
+    fun handle(handler: (D) -> Unit) {
+        val notified = notified
+        if (notified != null) handler(notified)
+        else this.handler = handler
+    }
+
+    fun notify(d: D) {
+        notified = d
+        handler(d)
+    }
+
+}
+
 fun Element.appendAttribute(qualifiedName: String, append: String, separator: String = "") {
     var value = getAttribute(qualifiedName)
     if (value.isNullOrBlank()) {
