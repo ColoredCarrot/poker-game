@@ -64,3 +64,25 @@ img.poker-non-community-card {
 .padding-left-small {
     padding-left: 15px;
 }
+
+
+div.poker-lobby-bg {
+    background-color: #ff8787;
+}
+div.poker-lobby-main {
+    background-color: #f2f4f6;
+    padding-top: 20px;
+}
+
+div.poker-lobby-spinner {
+    color: #085ec4;
+    margin-left: 14px;
+}
+
+div.poker-lobby-error {
+    color: #c43a2f;
+}
+
+.poker-lobby-info-label {
+    margin-bottom: 5px;
+}
