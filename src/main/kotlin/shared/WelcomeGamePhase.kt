@@ -43,7 +43,7 @@ private val WelcomeGamePhase = functionalComponentEx<WelcomeGamePhaseProps>("Wel
     lobbyContainer {
         h1 { +"Poker" }
 
-        div("uk-container") {
+        div("uk-container uk-grid-divider") {
             htmlAttrs["uk-grid"] = ""
 
             // Divide container into two columns
@@ -67,7 +67,9 @@ private val WelcomeGamePhase = functionalComponentEx<WelcomeGamePhaseProps>("Wel
                 }
             } // first column
             div("uk-width-1-2") {
-                div { +"Alternatively, you can also host your own game:" }
+                div("uk-text-center") {
+                    +"Alternatively, you can also host your own game:"
+                }
                 button(classes = "uk-button uk-button-large uk-button-secondary uk-margin-top uk-align-center") {
                     +"Host your own game"
                     attrs.onClickFunction = { evt ->
