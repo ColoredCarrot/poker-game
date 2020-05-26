@@ -5,6 +5,7 @@ import kotlinx.html.InputType
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onSubmitFunction
 import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.url.URLSearchParams
 import react.RBuilder
 import react.RProps
 import react.child
@@ -16,6 +17,7 @@ import react.dom.input
 import reactutils.functionalComponentEx
 import usingreact.lobbyContainer
 import vendor.useRef
+import kotlin.browser.window
 
 fun RBuilder.welcomeGamePhase(enterGameFn: (String) -> Unit, hostGameFn: () -> Unit) =
     child(WelcomeGamePhase, jsObject {
@@ -29,6 +31,12 @@ private external interface WelcomeGamePhaseProps : RProps {
 }
 
 private val WelcomeGamePhase = functionalComponentEx<WelcomeGamePhaseProps>("WelcomeGamePhase") { props ->
+
+    val autoJoinGame = URLSearchParams(window.location.search).get("game")
+    if (autoJoinGame != null) {
+        props.enterGameFn(autoJoinGame)
+        return@functionalComponentEx
+    }
 
     val joinGameInputRef = useRef<HTMLInputElement?>(null)
 

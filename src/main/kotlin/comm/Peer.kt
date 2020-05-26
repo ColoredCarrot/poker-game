@@ -92,7 +92,8 @@ open class Peer : Messenger<SessionId> {
             messageReceive(data as String)
         })
         remote.on("close", fun() {
-            log("Connection reset<br>Awaiting connection...")
+            // Connection to remote closed
+            log("disconnected from $remoteId")
             //remotes.remove(remote)
             //js("start(true)") // TODO: what's this
         })
