@@ -9,7 +9,7 @@ import react.RProps
 import react.child
 import react.dom.div
 import react.dom.p
-import react.useEffect
+import react.useEffectWithCleanup
 import reactutils.functionalComponentEx
 import shared.SessionId
 import shared.Table
@@ -32,12 +32,16 @@ private external interface ParticipantLobbyGamePhaseProps : RProps {
 private val ParticipantLobbyGamePhase =
     functionalComponentEx<ParticipantLobbyGamePhaseProps>("ParticipantLobbyGamePhase") { props ->
 
-        useEffect(listOf()) {
+        useEffectWithCleanup(listOf()) {
             props.connection.receive(
                 Messages.TotalGameReset.Type handledBy { (m) ->
                     props.switchToPlayingPhaseFn(m.yourTable, m.ante, m.activePlayer)
                 }
             )
+
+            return@useEffectWithCleanup {
+                props.connection.receive()
+            }
         }
 
         div("uk-container primary-container") {
