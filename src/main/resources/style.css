@@ -86,3 +86,7 @@ div.poker-lobby-error {
 .poker-lobby-info-label {
     margin-bottom: 5px;
 }
+
+form.poker-lobby-info-form {
+    margin-top: 8px;
+}

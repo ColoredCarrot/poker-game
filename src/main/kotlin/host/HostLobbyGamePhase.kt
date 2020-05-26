@@ -3,16 +3,18 @@ package host
 import comm.Host
 import kotlinext.js.jsObject
 import kotlinx.html.InputType
+import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onFocusFunction
 import org.w3c.dom.HTMLInputElement
 import react.RBuilder
 import react.RProps
 import react.child
-import react.dom.a
+import react.dom.button
 import react.dom.div
 import react.dom.form
 import react.dom.h1
+import react.dom.hr
 import react.dom.input
 import react.dom.span
 import react.dom.strong
@@ -21,6 +23,7 @@ import react.setValue
 import react.useEffectWithCleanup
 import react.useState
 import reactutils.functionalComponentEx
+import shared.counted
 import shared.htmlAttrs
 import shared.modifyURLSearchParams
 import kotlin.browser.window
@@ -83,18 +86,10 @@ private val HostLobbyGamePhase = functionalComponentEx<HostLobbyGamePhaseProps>(
 
                 if (actualPeerId != null) {
                     span("uk-text-success") { +"Connected. " }
-                    +"Waiting for players... "
-                    a("#") {
-                        +"Start game with $playersCount players"
+                    +"Waiting for players..."
 
-                        attrs.onClickFunction = { evt ->
-                            evt.preventDefault()
-                            println("clicked to start game")
-                            props.switchToPlayingPhaseFn()
-                        }
-                    }
-
-                    form(classes = "uk-form-stacked uk-grid-small") {
+                    // Display game ID, direct link
+                    form(classes = "uk-form-stacked uk-grid-small poker-lobby-info-form") {
                         htmlAttrs["uk-grid"] = ""
 
                         div("uk-width-1-2") {
@@ -127,6 +122,23 @@ private val HostLobbyGamePhase = functionalComponentEx<HostLobbyGamePhaseProps>(
                                     attrs.value = directLink
                                 }
                             }
+                        }
+                    } // form containing game ID and direct link
+
+                    // Button to start game
+                    hr {}
+                    button(classes = "uk-button uk-button-large") {
+                        attrs.classes += if (playersCount < 2) {
+                            attrs.disabled = true
+                            "uk-button-disabled"
+                        } else "uk-button-primary"
+
+                        +"Start Game with ${"player".counted(playersCount)}"
+
+                        attrs.onClickFunction = { evt ->
+                            evt.preventDefault()
+                            println("clicked to start game")
+                            props.switchToPlayingPhaseFn()
                         }
                     }
                 } else {

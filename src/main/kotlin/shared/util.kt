@@ -151,3 +151,7 @@ inline fun RDOMBuilder<*>.attrsApplyStyle(styler: dynamic.() -> Unit) {
 }
 
 fun <A, B> Pair<A, B>.swap() = second to first
+
+fun String.pluralize(n: Int) = if (n == 1) this else this + 's'
+
+fun String.counted(count: Int) = "$count ${pluralize(count)}"
