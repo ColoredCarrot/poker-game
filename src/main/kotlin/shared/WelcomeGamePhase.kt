@@ -3,20 +3,19 @@ package shared
 import kotlinext.js.jsObject
 import kotlinx.html.InputType
 import kotlinx.html.js.onClickFunction
-import kotlinx.html.js.onKeyUpFunction
+import kotlinx.html.js.onSubmitFunction
 import org.w3c.dom.HTMLInputElement
 import react.RBuilder
 import react.RProps
 import react.child
-import react.dom.a
 import react.dom.button
 import react.dom.div
+import react.dom.form
 import react.dom.h1
 import react.dom.input
-import react.dom.label
-import react.dom.p
 import reactutils.functionalComponentEx
 import usingreact.lobbyContainer
+import vendor.useRef
 
 fun RBuilder.welcomeGamePhase(enterGameFn: (String) -> Unit, hostGameFn: () -> Unit) =
     child(WelcomeGamePhase, jsObject {
@@ -30,30 +29,36 @@ private external interface WelcomeGamePhaseProps : RProps {
 }
 
 private val WelcomeGamePhase = functionalComponentEx<WelcomeGamePhaseProps>("WelcomeGamePhase") { props ->
+
+    val joinGameInputRef = useRef<HTMLInputElement?>(null)
+
     lobbyContainer {
         h1 { +"Poker" }
 
         div("uk-container") {
+            htmlAttrs["uk-grid"] = ""
+
             // Divide container into two columns
-            div("uk-width-1-2 uk-display-inline-block") {
-                div { +"Enter a game ID and press Enter to join a game." }
-                label {
-                    +"Game ID:"
-                    input(type = InputType.text) {
-                        attrs.autoComplete = false
-                        attrs.onKeyUpFunction = { evt ->
-                            // Note: we cannot actually cast to KeyboardEvent
-                            // because React provides its own Event with the
-                            // same interface, but whose type is not KeyboardEvent.
-                            if (evt.asDynamic().key as String == "Enter") {
-                                evt.preventDefault()
-                                props.enterGameFn((evt.currentTarget as HTMLInputElement).value)
-                            }
+            div("uk-width-1-2") {
+                +"Enter a game ID and press Enter to join a game."
+
+                form(classes = "poker-lobby-form uk-form-stacked") {
+                    attrs.onSubmitFunction = { evt ->
+                        evt.preventDefault()
+                        props.enterGameFn(joinGameInputRef.current!!.value)
+                    }
+
+                    div("poker-lobby-info-label") { +"Game ID:" }
+                    div("uk-form-controls") {
+                        input(classes = "uk-input", type = InputType.text) {
+                            attrs.autoComplete = false
+                            ref = joinGameInputRef
                         }
                     }
+                    //TODO input type=submit
                 }
             } // first column
-            div("uk-width-1-2 uk-display-inline-block") {
+            div("uk-width-1-2") {
                 div { +"Alternatively, you can also host your own game:" }
                 button(classes = "uk-button uk-button-large uk-button-secondary") {
                     +"Host your own game"

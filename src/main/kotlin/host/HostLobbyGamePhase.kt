@@ -85,7 +85,7 @@ private val HostLobbyGamePhase = functionalComponentEx<HostLobbyGamePhaseProps>(
                 +"Waiting for players..."
 
                 // Display game ID, direct link
-                form(classes = "uk-form-stacked uk-grid-small poker-lobby-info-form") {
+                form(classes = "uk-form-stacked uk-grid-small poker-lobby-form") {
                     htmlAttrs["uk-grid"] = ""
 
                     div("uk-width-1-2") {
