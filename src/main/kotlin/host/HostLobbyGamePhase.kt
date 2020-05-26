@@ -60,14 +60,14 @@ private val HostLobbyGamePhase = functionalComponentEx<HostLobbyGamePhaseProps>(
         }
 
         // TODO replace with onConnect or something and also hook into disconnects to --playersCount
-        props.connections.connectionRejector = {
+        props.connections.connectionAcceptor = {
             ++playersCount
             true
         }
 
         return@useEffectWithCleanup {
-            connHook.clearHandlers()
-            props.connections.connectionRejector = { false }
+            connHook.clear()
+            props.connections.connectionAcceptor = { false }
         }
     }
 

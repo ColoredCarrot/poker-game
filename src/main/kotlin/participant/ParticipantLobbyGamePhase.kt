@@ -47,6 +47,8 @@ private val ParticipantLobbyGamePhase =
         lobbyContainer {
             h1 { +"Join Game" }
 
+
+
             p { +"Waiting for game to start..." }
         }
     }

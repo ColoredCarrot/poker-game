@@ -88,7 +88,7 @@ private sealed class GamePhase {
                 // We, the host, get the first private game state,
                 // and the rest of the hands are sent to the other connected players
                 val pgsBySid: Map<String, PrivateGameState> = {
-                    val allSids = mutableListOf(connections.myPeerId)
+                    val allSids = mutableListOf(connections.peerId)
                     allSids += connections.peers()
                     allSids.associateWith { sid ->
                         PrivateGameState(
@@ -119,14 +119,14 @@ private sealed class GamePhase {
                 }
 
                 connections.sendDynamic { sid ->
-                    Messages.TotalGameReset(personalizedTables[sid]!!, gameSettings.ante, connections.myPeerId).jsonMessage()
+                    Messages.TotalGameReset(personalizedTables[sid]!!, gameSettings.ante, connections.peerId).jsonMessage()
                 }
 
                 switchPhaseFn(HostPlaying(
                     connections,
                     gameSettings,
                     communityCards,
-                    personalizedTables[connections.myPeerId]!!
+                    personalizedTables[connections.peerId]!!
                 ))
             })
         }

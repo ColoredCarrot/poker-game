@@ -58,7 +58,7 @@ private external interface HostPlayingGamePhaseProps : RProps {
 private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhaseProps>("HostPlayingGamePhase") { props ->
 
     var round by useState {
-        val roundTable = RoundTable(listOf(props.connections.myPeerId) + props.connections.peers())
+        val roundTable = RoundTable(listOf(props.connections.peerId) + props.connections.peers())
         Round(
             roundTable,
             RoundLabel.PREFLOP,
