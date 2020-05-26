@@ -26,6 +26,7 @@ import reactutils.functionalComponentEx
 import shared.counted
 import shared.htmlAttrs
 import shared.modifyURLSearchParams
+import usingreact.lobbyContainer
 import kotlin.browser.window
 
 fun RBuilder.hostLobbyGamePhase(connections: Host, switchToPlayingPhaseFn: () -> Unit) =
@@ -71,85 +72,77 @@ private val HostLobbyGamePhase = functionalComponentEx<HostLobbyGamePhaseProps>(
     }
 
 
+    lobbyContainer {
+        h1 { +"Host your own game" }
 
-    div("poker-lobby-bg") {
+        if (error != null) div("poker-lobby-error") {
+            strong { +"$error" }
+        } else div {
+            +"Status: "
 
-        div("uk-container poker-lobby-main") {
-            htmlAttrs["uk-height-viewport"] = "expand: true"
+            if (actualPeerId != null) {
+                span("uk-text-success") { +"Connected. " }
+                +"Waiting for players..."
 
-            h1 { +"Host your own game" }
+                // Display game ID, direct link
+                form(classes = "uk-form-stacked uk-grid-small poker-lobby-info-form") {
+                    htmlAttrs["uk-grid"] = ""
 
-            if (error != null) div("poker-lobby-error") {
-                strong { +"$error" }
-            } else div {
-                +"Status: "
-
-                if (actualPeerId != null) {
-                    span("uk-text-success") { +"Connected. " }
-                    +"Waiting for players..."
-
-                    // Display game ID, direct link
-                    form(classes = "uk-form-stacked uk-grid-small poker-lobby-info-form") {
-                        htmlAttrs["uk-grid"] = ""
-
-                        div("uk-width-1-2") {
-                            div("poker-lobby-info-label") { +"Your game ID: " }
-                            div("uk-form-controls") {
-                                input(classes = "uk-input", type = InputType.text) {
-                                    attrs.value = actualPeerId!!
-                                    attrs.readonly = true
-                                    attrs.autoFocus = true
-                                    attrs.onFocusFunction = { evt ->
-                                        val el = evt.currentTarget as? HTMLInputElement
-                                        el?.select()
-                                    }
+                    div("uk-width-1-2") {
+                        div("poker-lobby-info-label") { +"Your game ID: " }
+                        div("uk-form-controls") {
+                            input(classes = "uk-input", type = InputType.text) {
+                                attrs.value = actualPeerId!!
+                                attrs.readonly = true
+                                attrs.autoFocus = true
+                                attrs.onFocusFunction = { evt ->
+                                    val el = evt.currentTarget as? HTMLInputElement
+                                    el?.select()
                                 }
                             }
-                        }
-
-                        div("uk-width-1-2") {
-                            div("poker-lobby-info-label") { +"Direct link: " }
-                            div("uk-form-controls") {
-                                input(classes = "uk-input", type = InputType.text) {
-                                    attrs.readonly = true
-                                    attrs.onFocusFunction = { evt ->
-                                        val el = evt.currentTarget as? HTMLInputElement
-                                        el?.select()
-                                    }
-                                    val directLink = modifyURLSearchParams(window.location.href) {
-                                        it.append("game", actualPeerId!!)
-                                    }
-                                    attrs.value = directLink
-                                }
-                            }
-                        }
-                    } // form containing game ID and direct link
-
-                    // Button to start game
-                    hr {}
-                    button(classes = "uk-button uk-button-large") {
-                        attrs.classes += if (playersCount < 2) {
-                            attrs.disabled = true
-                            "uk-button-disabled"
-                        } else "uk-button-primary"
-
-                        +"Start Game with ${"player".counted(playersCount)}"
-
-                        attrs.onClickFunction = { evt ->
-                            evt.preventDefault()
-                            println("clicked to start game")
-                            props.switchToPlayingPhaseFn()
                         }
                     }
-                } else {
-                    +"Connecting..."
-                    div("poker-lobby-spinner") {
-                        htmlAttrs["uk-spinner"] = ""
+
+                    div("uk-width-1-2") {
+                        div("poker-lobby-info-label") { +"Direct link: " }
+                        div("uk-form-controls") {
+                            input(classes = "uk-input", type = InputType.text) {
+                                attrs.readonly = true
+                                attrs.onFocusFunction = { evt ->
+                                    val el = evt.currentTarget as? HTMLInputElement
+                                    el?.select()
+                                }
+                                val directLink = modifyURLSearchParams(window.location.href) {
+                                    it.append("game", actualPeerId!!)
+                                }
+                                attrs.value = directLink
+                            }
+                        }
+                    }
+                } // form containing game ID and direct link
+
+                // Button to start game
+                hr {}
+                button(classes = "uk-button uk-button-large") {
+                    attrs.classes += if (playersCount < 2) {
+                        attrs.disabled = true
+                        "uk-button-disabled"
+                    } else "uk-button-primary"
+
+                    +"Start Game with ${"player".counted(playersCount)}"
+
+                    attrs.onClickFunction = { evt ->
+                        evt.preventDefault()
+                        println("clicked to start game")
+                        props.switchToPlayingPhaseFn()
                     }
                 }
-            } // Status
-
-        }
-
-    }
+            } else {
+                +"Connecting..."
+                div("poker-lobby-spinner") {
+                    htmlAttrs["uk-spinner"] = ""
+                }
+            }
+        } // Status
+    } // lobbyContainer
 }
