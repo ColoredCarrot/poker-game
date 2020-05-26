@@ -10,10 +10,12 @@ import react.RProps
 import react.child
 import react.dom.a
 import react.dom.div
+import react.dom.h1
 import react.dom.input
 import react.dom.label
 import react.dom.p
 import reactutils.functionalComponentEx
+import usingreact.lobbyContainer
 
 fun RBuilder.welcomeGamePhase(enterGameFn: (String) -> Unit, hostGameFn: () -> Unit) =
     child(WelcomeGamePhase, jsObject {
@@ -27,7 +29,9 @@ private external interface WelcomeGamePhaseProps : RProps {
 }
 
 private val WelcomeGamePhase = functionalComponentEx<WelcomeGamePhaseProps>("WelcomeGamePhase") { props ->
-    div {
+    lobbyContainer {
+        h1 { +"Poker" }
+
         p {
             +"Enter a game ID and press Enter to join a game. Alternatively, you can also "
             a(href = "#") {
