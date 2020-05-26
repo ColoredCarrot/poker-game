@@ -60,7 +60,7 @@ private val WelcomeGamePhase = functionalComponentEx<WelcomeGamePhaseProps>("Wel
             } // first column
             div("uk-width-1-2") {
                 div { +"Alternatively, you can also host your own game:" }
-                button(classes = "uk-button uk-button-large uk-button-secondary") {
+                button(classes = "uk-button uk-button-large uk-button-secondary uk-margin-top uk-align-center") {
                     +"Host your own game"
                     attrs.onClickFunction = { evt ->
                         evt.preventDefault()
