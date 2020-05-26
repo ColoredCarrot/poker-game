@@ -49,13 +49,13 @@ private val HostLobbyGamePhase = functionalComponentEx<HostLobbyGamePhaseProps>(
     useEffectWithCleanup(listOf()) {
         val connHook = props.connections.hook
 
-        connHook.open.handle { peerId ->
+        connHook.open { peerId ->
             actualPeerId = peerId
         }
-        connHook.close.handle { reconnectFn ->
+        connHook.close { reconnectFn ->
             actualPeerId = null
         }
-        connHook.error.handle { err ->
+        connHook.error { err ->
             error = err
         }
 
