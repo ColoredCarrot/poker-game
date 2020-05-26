@@ -5,6 +5,7 @@ import comm.msg.MessageHandler
 import comm.msg.MessageTypeRegistry
 import comm.msg.Messenger
 import kotlinext.js.jsObject
+import shared.Notify
 import shared.PNotify
 import shared.SessionId
 import toImplicitBoolean
@@ -70,6 +71,7 @@ open class Peer : Messenger<SessionId> {
 
         them.on("open") {
             log("connected to ${them.peer}")
+            hook.connected.notify()
         }
         them.on("error") { err: dynamic ->
             log("error connecting to $theirId: ", err)
@@ -157,6 +159,7 @@ open class Peer : Messenger<SessionId> {
         internal val open = PNotify<String>()
         internal val close = PNotify<() -> Unit>()
         internal val error = PNotify<dynamic>()
+        internal val connected = Notify()
         internal val errConnecting = PNotify<dynamic>()
 
         /**
@@ -180,12 +183,15 @@ open class Peer : Messenger<SessionId> {
 
         fun error(handler: (err: dynamic) -> Unit) = error.handle(handler)
 
+        fun connectedToPeer(handler: () -> Unit) = connected.handle(handler)
+
         fun errorConnectingToPeer(handler: (err: dynamic) -> Unit) = errConnecting.handle(handler)
 
         fun clear() {
             open {}
             close {}
             error {}
+            connectedToPeer {}
             errorConnectingToPeer {}
         }
     }
