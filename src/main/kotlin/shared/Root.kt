@@ -94,7 +94,7 @@ private sealed class GamePhase {
                         PrivateGameState(
                             PlayerInfo(
                                 sid,
-                                Profile(names[sid] ?: Random.nextName()),
+                                Profile(names[sid]?.takeIf { it.isNotBlank() } ?: Random.nextName()),
                                 drawCards.takeHand(2),
                                 Chips(200)
                             )
