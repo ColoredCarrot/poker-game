@@ -83,6 +83,14 @@ class OutParam<T : Any> {
     lateinit var out: T
 }
 
+class InOutParam<T>(value: T, private val setter: (T) -> Unit) {
+    var value: T = value
+        set(value) {
+            setter(value)
+            field = value
+        }
+}
+
 class Notify {
 
     private var notified = false

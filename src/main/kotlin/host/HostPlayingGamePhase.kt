@@ -10,13 +10,13 @@ import react.RProps
 import react.child
 import react.getValue
 import react.setValue
-import react.useEffect
 import react.useEffectWithCleanup
 import react.useState
 import reactutils.functionalComponentEx
 import shared.Card
 import shared.ConcreteCard
 import shared.Hand
+import shared.InOutParam
 import shared.Round
 import shared.RoundAction
 import shared.RoundLabel
@@ -93,16 +93,18 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
         //TODO clear/reset pot, distribute pot money to winners (though prolly from btn in action center)
     }
 
-    val revealCommunityCards = { from: Int, until: Int ->
-        table = table.mapAllPlayers { player ->
+    val revealCommunityCards = { from: Int, until: Int, table: InOutParam<Table> ->
+        table.value = table.value.mapAllPlayers { player ->
             player.setHand { hand ->
                 hand!! + props.communityCards.subList(from, until).map { ConcreteCard(it, true) }
             }
         }
-        props.connections.send(Messages.SetHands(table.allPlayers.associate { it.sessionId to it.hand!! }))
+        props.connections.send(Messages.SetHands(table.value.allPlayers.associate { it.sessionId to it.hand!! }))
     }
 
     fun someoneRoundAction(actor: SessionId, action: RoundAction, newTable: Table, newRound: Round) {
+        var newTable = newTable
+
         lastAction = if (actor != newTable.mySessionId) action to actor else null
 
         val nextRound = newRound.isFinished()
@@ -110,15 +112,15 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
             when (newRound.label) {
                 RoundLabel.PREFLOP -> {
                     // Reveal first three community cards (the flop)
-                    revealCommunityCards(0, 3)
+                    revealCommunityCards(0, 3, InOutParam(newTable, { newTable = it }))
                 }
                 RoundLabel.FLOP -> {
                     // Reveal the fourth community card (the turn)
-                    revealCommunityCards(3, 4)
+                    revealCommunityCards(3, 4, InOutParam(newTable, { newTable = it }))
                 }
                 RoundLabel.TURN -> {
                     // Reveal the fifth and final community card (the river)
-                    revealCommunityCards(4, 5)
+                    revealCommunityCards(4, 5, InOutParam(newTable, { newTable = it }))
                 }
                 RoundLabel.RIVER -> {
                     // This is a special case because we just finished the last round.
