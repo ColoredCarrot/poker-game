@@ -75,7 +75,7 @@ private sealed class GamePhase {
 
     class HostLobby(private val connections: Host) : GamePhase() {
         override fun RBuilder.render(switchPhaseFn: (GamePhase) -> Unit) {
-            hostLobbyGamePhase(connections, switchToPlayingPhaseFn = {
+            hostLobbyGamePhase(connections, switchToPlayingPhaseFn = { names ->
 
                 val gameSettings = GameSettings()
 
@@ -94,7 +94,7 @@ private sealed class GamePhase {
                         PrivateGameState(
                             PlayerInfo(
                                 sid,
-                                Profile(Random.nextName()),
+                                Profile(names[sid] ?: Random.nextName()),
                                 drawCards.takeHand(2),
                                 Chips(200)
                             )

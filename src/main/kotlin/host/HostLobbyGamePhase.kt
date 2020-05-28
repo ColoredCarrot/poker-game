@@ -31,7 +31,7 @@ import usingreact.lobbyContainer
 import usingreact.lobbyPlayerList
 import kotlin.browser.window
 
-fun RBuilder.hostLobbyGamePhase(connections: Host, switchToPlayingPhaseFn: () -> Unit) =
+fun RBuilder.hostLobbyGamePhase(connections: Host, switchToPlayingPhaseFn: (names: Map<SessionId, String>) -> Unit) =
     childEx(HostLobbyGamePhase::class) {
         this.connections = connections
         this.switchToPlayingPhaseFn = switchToPlayingPhaseFn
@@ -39,7 +39,7 @@ fun RBuilder.hostLobbyGamePhase(connections: Host, switchToPlayingPhaseFn: () ->
 
 private external interface HostLobbyGamePhaseProps : RProps {
     var connections: Host
-    var switchToPlayingPhaseFn: () -> Unit
+    var switchToPlayingPhaseFn: (names: Map<SessionId, String>) -> Unit
 }
 
 private class HostLobbyGamePhaseState : RState {
@@ -169,7 +169,7 @@ private class HostLobbyGamePhase : RComponent<HostLobbyGamePhaseProps, HostLobby
                         attrs.onClickFunction = { evt ->
                             evt.preventDefault()
                             println("clicked to start game")
-                            props.switchToPlayingPhaseFn()
+                            props.switchToPlayingPhaseFn(state.otherNames + (props.connections.peerId to state.chooseName))
                         }
                     }
 
