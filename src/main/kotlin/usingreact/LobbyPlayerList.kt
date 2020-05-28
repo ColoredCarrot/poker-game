@@ -2,6 +2,7 @@ package usingreact
 
 import kotlinext.js.jsObject
 import kotlinx.html.InputType
+import kotlinx.html.classes
 import kotlinx.html.js.onChangeFunction
 import org.w3c.dom.HTMLInputElement
 import react.RBuilder
@@ -15,18 +16,19 @@ import react.dom.ul
 import reactutils.functionalComponentEx
 import shared.attrsApplyStyle
 
-fun RBuilder.lobbyPlayerList(otherPlayers: List<String>, ownName: String, setOwnNameFn: (String) -> Unit) =
+fun RBuilder.lobbyPlayerList(otherPlayers: List<String>, ownName: String, ownNameValidated: Boolean, setOwnNameFn: (String) -> Unit) =
     child(LobbyPlayerList, jsObject {
         this.ownName = ownName
+        this.ownNameValidated = ownNameValidated
         this.setOwnNameFn = setOwnNameFn
         this.otherPlayers = otherPlayers
     })
 
 private external interface LobbyPlayerListProps : RProps {
     var ownName: String
+    var ownNameValidated: Boolean
     var setOwnNameFn: (String) -> Unit
     var otherPlayers: List<String>
-    //TODO: isNameValidated: Boolean to indicate whether to add uk-form-success (or similar)
 }
 
 private val LobbyPlayerList = functionalComponentEx<LobbyPlayerListProps>("LobbyPlayerList") { props ->
@@ -40,6 +42,9 @@ private val LobbyPlayerList = functionalComponentEx<LobbyPlayerListProps>("Lobby
 
             li {
                 input(type = InputType.text, classes = "uk-input uk-form-blank uk-form-width-medium") {
+                    if (props.ownNameValidated) {
+                        attrs.classes += "uk-form-success"
+                    }
                     attrs.placeholder = "Enter your name..."
                     attrs.value = props.ownName
                     attrs.onChangeFunction = { evt ->

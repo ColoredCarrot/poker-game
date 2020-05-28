@@ -7,11 +7,16 @@ import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.url.URL
 import org.w3c.dom.url.URLSearchParams
+import react.Component
+import react.RBuilder
+import react.RProps
 import react.dom.RDOMBuilder
+import react.rClass
 import kotlin.browser.document
 import kotlin.browser.window
 import kotlin.properties.ReadOnlyProperty
 import kotlin.random.Random
+import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
 @Suppress("SpellCheckingInspection")
@@ -163,3 +168,13 @@ fun <A, B> Pair<A, B>.swap() = second to first
 fun String.pluralize(n: Int) = if (n == 1) this else this + 's'
 
 fun String.counted(count: Int) = "$count ${pluralize(count)}"
+
+inline fun <P : RProps, reified C : Component<P, *>> RBuilder.childEx(props: P) =
+    child(C::class.rClass, props, {})
+
+@Suppress("RemoveExplicitTypeArguments") // actually needed or compilation error
+inline fun <P : RProps, reified C : Component<P, *>> RBuilder.childEx(
+    @Suppress("UNUSED_PARAMETER") klass: KClass<C>,
+    propsInit: P.() -> Unit
+) =
+    childEx<P, C>(jsObject<P>(propsInit))

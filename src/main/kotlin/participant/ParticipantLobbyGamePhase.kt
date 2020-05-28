@@ -3,6 +3,7 @@ package participant
 import comm.Participant
 import comm.msg.Messages
 import comm.msg.handledBy
+import comm.msg.send
 import kotlinext.js.jsObject
 import react.RBuilder
 import react.RProps
@@ -42,10 +43,16 @@ private val ParticipantLobbyGamePhase =
         var connectedToHost by useState(false)
         var error by useState<dynamic>(null)
         var myPlayerName by useState("")
+        var myPlayerNameValidated by useState(false)
         var otherPlayerNames by useState(listOf<String>())
 
         useEffectWithCleanup(listOf()) {
             props.connection.receive(
+                Messages.Lobby_UpdatePlayerList.Type handledBy { (m) ->
+                    // TODO Fix: myPlayerName might be stale at the time the otherPlayerNames state update is executed
+                    otherPlayerNames = m.allNames.filter { it != myPlayerName }
+                    myPlayerNameValidated = myPlayerName in m.allNames
+                },
                 Messages.TotalGameReset.Type handledBy { (m) ->
                     props.switchToPlayingPhaseFn(m.yourTable, m.ante, m.activePlayer)
                 }
@@ -74,9 +81,10 @@ private val ParticipantLobbyGamePhase =
                 if (connectedToHost) {
                     span("uk-text-success") { +"Connected. " }
                     +"Waiting for host to start game..."
-                    lobbyPlayerList(otherPlayerNames, myPlayerName) { newName ->
+                    lobbyPlayerList(otherPlayerNames, myPlayerName, myPlayerNameValidated) { newName ->
                         myPlayerName = newName
-                        //TODO send name to host and then display as validated (green) (duplicate name is NOT an error)
+                        props.connection.send(Messages.Lobby_SetName(newName, props.connection.peerId))
+                        myPlayerNameValidated = false
                     }
                 } else {
                     +"Connecting..."
