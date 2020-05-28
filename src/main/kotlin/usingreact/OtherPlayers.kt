@@ -90,8 +90,11 @@ private val OtherPlayer = functionalComponentEx<OtherPlayerProps>("OtherPlayer")
         div { attrsApplyStyle { height = "14px" } }
 
         div {
-            props.player.hand?.also {
-                handDisplay(it, renderCommunityCards = false, requestHandReorderFn = { TODO() })
+            // TODO: should also show enemy hands when game is over
+            if (props.player.hasFolded || Cheat.showEnemyCards) {
+                props.player.hand?.also {
+                    handDisplay(it, renderCommunityCards = false, requestHandReorderFn = { TODO() })
+                }
             }
         }
 
