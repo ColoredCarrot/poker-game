@@ -20,6 +20,7 @@ import shared.SessionId
 import shared.Table
 import shared.htmlAttrs
 import usingreact.lobbyContainer
+import usingreact.lobbyPlayerList
 
 fun RBuilder.participantLobbyGamePhase(
     connection: Participant,
@@ -40,6 +41,8 @@ private val ParticipantLobbyGamePhase =
 
         var connectedToHost by useState(false)
         var error by useState<dynamic>(null)
+        var myPlayerName by useState("")
+        var otherPlayerNames by useState(listOf<String>())
 
         useEffectWithCleanup(listOf()) {
             props.connection.receive(
@@ -71,6 +74,10 @@ private val ParticipantLobbyGamePhase =
                 if (connectedToHost) {
                     span("uk-text-success") { +"Connected. " }
                     +"Waiting for host to start game..."
+                    lobbyPlayerList(otherPlayerNames, myPlayerName) { newName ->
+                        myPlayerName = newName
+                        //TODO send name to host and then display as validated (green) (duplicate name is NOT an error)
+                    }
                 } else {
                     +"Connecting..."
                     div("poker-lobby-spinner") {
