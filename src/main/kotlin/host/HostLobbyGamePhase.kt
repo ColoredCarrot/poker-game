@@ -27,6 +27,7 @@ import shared.counted
 import shared.htmlAttrs
 import shared.modifyURLSearchParams
 import usingreact.lobbyContainer
+import usingreact.lobbyPlayerList
 import kotlin.browser.window
 
 fun RBuilder.hostLobbyGamePhase(connections: Host, switchToPlayingPhaseFn: () -> Unit) =
@@ -45,6 +46,7 @@ private val HostLobbyGamePhase = functionalComponentEx<HostLobbyGamePhaseProps>(
     var actualPeerId by useState<String?>(null)
     var playersCount by useState(1)
     var error by useState<dynamic>(null)
+    var chooseName by useState("")
 
     useEffectWithCleanup(listOf()) {
         val connHook = props.connections.hook
@@ -137,6 +139,9 @@ private val HostLobbyGamePhase = functionalComponentEx<HostLobbyGamePhaseProps>(
                         props.switchToPlayingPhaseFn()
                     }
                 }
+
+                // TODO: dynamically generate list of other players' names
+                lobbyPlayerList(listOf("Another", "Todo"), chooseName) { newName -> chooseName = newName }
             } else {
                 +"Connecting..."
                 div("poker-lobby-spinner") {
