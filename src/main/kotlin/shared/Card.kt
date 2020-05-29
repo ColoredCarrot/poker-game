@@ -15,6 +15,10 @@ class Card private constructor(
     @Transient
     val image = "cards/${typeName}_of_${suit.filenameSuffix}.svg"
 
+    override fun toString(): String {
+        return "$typeName of ${suit.displayName}"
+    }
+
     companion object {
 
         val CLUBS = generateSet(Suit.CLUBS)
