@@ -44,7 +44,7 @@ private class HandDisplay : RPureComponent<HandDisplayProps, RState>() {
     }
 
     override fun RBuilder.render() {
-        div("uk-grid-small uk-child-width-expand") {
+        div("uk-grid-small uk-child-width-auto uk-flex-center") {
             ref = directParentOfCardsRef
             attrs {
                 attributes["uk-grid"] = ""
