@@ -27,6 +27,7 @@ import shared.mapAllPlayers
 import shared.mapPlayer
 import shared.minus
 import shared.plus
+import shared.renderNextRoundPopup
 import shared.reorderMyHand
 import shared.setHand
 import shared.setMoney
@@ -35,6 +36,7 @@ import shared.setWinners
 import usingreact.ActionCenterCallbacks
 import usingreact.GameProps
 import usingreact.game
+import vendor.Swal
 
 fun RBuilder.hostPlayingGamePhase(
     connections: Host,
@@ -148,7 +150,9 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
             )
         )
 
-        //TODO if (nextRound) gameRenderer.renderNextRound()
+        if (nextRound) {
+            renderNextRoundPopup(newRound.label)
+        }
     }
 
     val someoneFold = { actor: SessionId ->

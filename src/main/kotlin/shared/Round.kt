@@ -121,6 +121,8 @@ enum class RoundLabel {
     RIVER;
 
     fun next() = values().getOrNull(ordinal + 1)
+
+    override fun toString() = name.toLowerCase().capitalize()
 }
 
 @Serializable

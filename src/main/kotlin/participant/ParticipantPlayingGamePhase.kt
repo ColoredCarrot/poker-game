@@ -14,12 +14,14 @@ import react.useEffectWithCleanup
 import react.useState
 import reactutils.functionalComponentEx
 import shared.RoundAction
+import shared.RoundLabel
 import shared.SessionId
 import shared.Table
 import shared.mapAllPlayers
 import shared.mapPlayer
 import shared.minus
 import shared.plus
+import shared.renderNextRoundPopup
 import shared.reorderMyHand
 import shared.setHand
 import shared.setMoney
@@ -83,7 +85,7 @@ private val ParticipantPlayingGamePhase =
                     }
 
                     if (m.isNextRound) {
-                        //TODO gameRenderer.renderNextRound()
+                        renderNextRoundPopup(RoundLabel.PREFLOP/*FIXME*/)
                     }
                 }
             )
