@@ -46,11 +46,11 @@ class Hand(val cards: List<ConcreteCard>) : Comparable<Hand> {
             }
             val suits = IntArray(5) { i ->
                 val card = cards[i].card
-                when (card.faction) {
-                    Card.Faction.SPADES -> 1
-                    Card.Faction.CLUBS -> 2
-                    Card.Faction.HEARTS -> 4
-                    Card.Faction.DIAMONDS -> 8
+                when (card.suit) {
+                    Card.Suit.SPADES -> 1
+                    Card.Suit.CLUBS -> 2
+                    Card.Suit.HEARTS -> 4
+                    Card.Suit.DIAMONDS -> 8
                 }
             }
             RankPokerHandPublic.rankPokerHand5(nr, suits)
@@ -70,11 +70,11 @@ class Hand(val cards: List<ConcreteCard>) : Comparable<Hand> {
             }
             val suits = IntArray(7) { i ->
                 val card = cards[i].card
-                when (card.faction) {
-                    Card.Faction.SPADES -> 1
-                    Card.Faction.CLUBS -> 2
-                    Card.Faction.HEARTS -> 4
-                    Card.Faction.DIAMONDS -> 8
+                when (card.suit) {
+                    Card.Suit.SPADES -> 1
+                    Card.Suit.CLUBS -> 2
+                    Card.Suit.HEARTS -> 4
+                    Card.Suit.DIAMONDS -> 8
                 }
             }
             // Try all combinations and choose best one
