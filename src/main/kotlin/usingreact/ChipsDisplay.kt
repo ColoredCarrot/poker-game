@@ -5,7 +5,6 @@ import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.HTMLImageElement
 import org.w3c.dom.Image
 import react.RBuilder
-import react.RComponent
 import react.RProps
 import react.RPureComponent
 import react.RReadableRef
@@ -125,7 +124,7 @@ private class ChipStack : RPureComponent<ChipStackProps, RState>() {
     }
 }
 
-private const val MAX_CHIPS_PER_STACK = 5
+private const val MAX_CHIPS_PER_STACK = Chips.MAX_CHIPS_PER_STACK
 
 private const val CHIP_STACK_WIDTH = 128
 private const val CHIP_STACK_SINGLE_HEIGHT = CHIP_STACK_WIDTH
