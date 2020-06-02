@@ -73,7 +73,7 @@ data class Round(
      *
      * Once this method has returned `true`,
      * the behaviour of all future invocations of **any** methods
-     * on this round is **undefined**.
+     * on this round is **undefined** unless otherwise specified.
      */
     fun isFinished(): Boolean {
         if (folded.size >= roundTable.size - 1) return true
