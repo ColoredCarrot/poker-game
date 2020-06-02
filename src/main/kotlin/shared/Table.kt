@@ -26,6 +26,12 @@ class Table(
 
     val allSessionIds get() = listOf(mySessionId) + otherPlayers.all.map { it.sessionId }
 
+    fun getProfile(sid: SessionId) =
+        if (sid == mySessionId) myself.playerInfo.profile
+        else otherPlayers[sid].profile
+
+    fun getName(sid: SessionId) = getProfile(sid).name
+
 }
 
 inline fun Table.setPot(pot: (Chips) -> Chips) = Table(

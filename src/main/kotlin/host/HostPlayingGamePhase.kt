@@ -36,7 +36,6 @@ import shared.setWinners
 import usingreact.ActionCenterCallbacks
 import usingreact.GameProps
 import usingreact.game
-import vendor.Swal
 
 fun RBuilder.hostPlayingGamePhase(
     connections: Host,
@@ -146,12 +145,16 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
                 updatedMoneyValue = newTable.allPlayers[actor].money.value,
                 pot = newTable.pot.value,
                 reason = actor to action,
-                isNextRound = nextRound
+                isNextRound = if (nextRound) Messages.UpdateRound.NextRoundInfo(
+                    label = newRound.label,
+                    ante = newRound.ante,
+                    underTheGun = newRound.activePlayer.get()
+                ) else null
             )
         )
 
         if (nextRound) {
-            renderNextRoundPopup(newRound.label)
+            renderNextRoundPopup(newRound.label, newRound.ante, newTable.getName(newRound.activePlayer.get()))
         }
     }
 

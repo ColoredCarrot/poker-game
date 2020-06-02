@@ -14,7 +14,6 @@ import react.useEffectWithCleanup
 import react.useState
 import reactutils.functionalComponentEx
 import shared.RoundAction
-import shared.RoundLabel
 import shared.SessionId
 import shared.Table
 import shared.mapAllPlayers
@@ -84,8 +83,12 @@ private val ParticipantPlayingGamePhase =
                         lastAction = action to actor
                     }
 
-                    if (m.isNextRound) {
-                        renderNextRoundPopup(RoundLabel.PREFLOP/*FIXME*/)
+                    if (m.isNextRound != null) {
+                        renderNextRoundPopup(
+                            m.isNextRound.label,
+                            m.isNextRound.ante,
+                            table.getName(m.isNextRound.underTheGun)
+                        )
                     }
                 }
             )

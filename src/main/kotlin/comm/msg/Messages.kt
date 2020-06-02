@@ -5,6 +5,7 @@ package comm.msg
 import kotlinx.serialization.Serializable
 import shared.Hand
 import shared.RoundAction
+import shared.RoundLabel
 import shared.SessionId
 import shared.Table
 
@@ -18,6 +19,8 @@ object Messages : MessageTypeRegistry(
     "UpdateRound" to UpdateRound.Type,
     "GameFinish" to GameFinish.Type
 ) {
+
+    // TODO: Do these really need to be data classes? That's a lot of overhead code-size-wise
 
     @Serializable
     data class Lobby_SetName(val name: String, val myId: SessionId) : JsonMessageToken<Lobby_SetName> {
@@ -75,11 +78,18 @@ object Messages : MessageTypeRegistry(
         val updatedMoneyValue: Int,
         val pot: Int,
         val reason: Pair<SessionId, RoundAction>,
-        val isNextRound: Boolean
+        val isNextRound: NextRoundInfo?
     ) : JsonMessageToken<UpdateRound> {
         override val jsonType get() = Type
 
         object Type : JsonMessage.Type<UpdateRound>(serializer())
+
+        @Serializable
+        data class NextRoundInfo(
+            val label: RoundLabel,
+            val ante: Int,
+            val underTheGun: SessionId
+        )
     }
 
     @Serializable
