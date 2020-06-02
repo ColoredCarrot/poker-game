@@ -2,8 +2,7 @@ package shared
 
 import vendor.Swal
 
-fun renderNextRoundPopup(label: RoundLabel, ante: Int, underTheGun: String) {
-    // TODO render ante
+fun renderNextRoundPopup(label: RoundLabel, underTheGun: String) {
     Swal.Options(
         title = "Next Round: $label",
         text = "$underTheGun is under the gun!",

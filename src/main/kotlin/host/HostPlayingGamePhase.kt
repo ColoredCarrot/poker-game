@@ -147,14 +147,13 @@ private val HostPlayingGamePhase = functionalComponentEx<HostPlayingGamePhasePro
                 reason = actor to action,
                 isNextRound = if (nextRound) Messages.UpdateRound.NextRoundInfo(
                     label = newRound.label,
-                    ante = newRound.ante,
                     underTheGun = newRound.activePlayer.get()
                 ) else null
             )
         )
 
         if (nextRound) {
-            renderNextRoundPopup(newRound.label, newRound.ante, newTable.getName(newRound.activePlayer.get()))
+            renderNextRoundPopup(newRound.label, newTable.getName(newRound.activePlayer.get()))
         }
     }
 

@@ -87,7 +87,6 @@ object Messages : MessageTypeRegistry(
         @Serializable
         data class NextRoundInfo(
             val label: RoundLabel,
-            val ante: Int,
             val underTheGun: SessionId
         )
     }

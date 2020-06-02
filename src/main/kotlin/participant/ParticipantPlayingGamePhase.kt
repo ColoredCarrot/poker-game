@@ -84,11 +84,7 @@ private val ParticipantPlayingGamePhase =
                     }
 
                     if (m.isNextRound != null) {
-                        renderNextRoundPopup(
-                            m.isNextRound.label,
-                            m.isNextRound.ante,
-                            table.getName(m.isNextRound.underTheGun)
-                        )
+                        renderNextRoundPopup(m.isNextRound.label, table.getName(m.isNextRound.underTheGun))
                     }
                 }
             )
