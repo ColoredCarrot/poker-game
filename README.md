@@ -10,6 +10,18 @@ The app is based on React.
 A live preview is available at http://home.in.tum.de/~koch/play-poker/
 (*may not always reflect most recent updates*).
 
+
+### Current Status
+
+At this time, the game is under heavy development.
+It is not yet feature-complete,
+though it should be somewhat playable.
+Breaking changes may occur at any moment.
+
+This is just a pet project of a computer science student.
+Don't expect any sort of guaranteed future support or maintenance.
+
+
 ### Development usage
 
 Kotlin/JS exports all code into a `poker-game` object in the global namespace.
