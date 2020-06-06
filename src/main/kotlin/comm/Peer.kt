@@ -94,6 +94,7 @@ open class Peer : Messenger<SessionId> {
         remote.on("close", fun() {
             // Connection to remote closed
             log("disconnected from $remoteId")
+            hook.disconnected.notify(remoteId)
             //remotes.remove(remote)
             //js("start(true)") // TODO: what's this
         })
@@ -161,6 +162,7 @@ open class Peer : Messenger<SessionId> {
         internal val close = PNotify<() -> Unit>()
         internal val error = PNotify<dynamic>()
         internal val connected = Notify()
+        internal val disconnected = PNotify<SessionId>()
         internal val errConnecting = PNotify<dynamic>()
 
         /**
@@ -186,6 +188,8 @@ open class Peer : Messenger<SessionId> {
 
         fun connectedToPeer(handler: () -> Unit) = connected.handle(handler)
 
+        fun disconnectedFromPeer(handler: (peer: SessionId) -> Unit) = disconnected.handle(handler)
+
         fun errorConnectingToPeer(handler: (err: dynamic) -> Unit) = errConnecting.handle(handler)
 
         fun clear() {
@@ -193,6 +197,7 @@ open class Peer : Messenger<SessionId> {
             close {}
             error {}
             connectedToPeer {}
+            disconnectedFromPeer {}
             errorConnectingToPeer {}
         }
     }
