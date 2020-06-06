@@ -29,6 +29,7 @@ import shared.htmlAttrs
 import shared.modifyURLSearchParams
 import usingreact.lobbyContainer
 import usingreact.lobbyPlayerList
+import usingreact.valueDisplay
 import kotlin.browser.window
 
 fun RBuilder.hostLobbyGamePhase(connections: Host, switchToPlayingPhaseFn: (names: Map<SessionId, String>) -> Unit) =
@@ -137,32 +138,17 @@ private class HostLobbyGamePhase : RComponent<HostLobbyGamePhaseProps, HostLobby
                         div("uk-width-1-2") {
                             div("poker-lobby-info-label") { +"Your game ID: " }
                             div("uk-form-controls") {
-                                input(classes = "uk-input", type = InputType.text) {
-                                    attrs.value = state.actualPeerId!!
-                                    attrs.readonly = true
-                                    attrs.autoFocus = true
-                                    attrs.onFocusFunction = { evt ->
-                                        val el = evt.currentTarget as? HTMLInputElement
-                                        el?.select()
-                                    }
-                                }
+                                valueDisplay(state.actualPeerId!!, autoFocus = true)
                             }
                         }
 
                         div("uk-width-1-2") {
                             div("poker-lobby-info-label") { +"Direct link: " }
                             div("uk-form-controls") {
-                                input(classes = "uk-input", type = InputType.text) {
-                                    attrs.readonly = true
-                                    attrs.onFocusFunction = { evt ->
-                                        val el = evt.currentTarget as? HTMLInputElement
-                                        el?.select()
-                                    }
-                                    val directLink = modifyURLSearchParams(window.location.href) {
-                                        it.append("game", state.actualPeerId!!)
-                                    }
-                                    attrs.value = directLink
+                                val directLink = modifyURLSearchParams(window.location.href) {
+                                    it.append("game", state.actualPeerId!!)
                                 }
+                                valueDisplay(directLink)
                             }
                         }
                     } // form containing game ID and direct link
