@@ -74,6 +74,12 @@ private class HostLobbyGamePhase : RComponent<HostLobbyGamePhaseProps, HostLobby
             setState { ++playersCount }
             true
         }
+        connHook.disconnectedFromPeer { sid ->
+            setState {
+                --playersCount
+                otherNames -= sid
+            }
+        }
 
         props.connections.receive(
             Messages.Lobby_SetName.Type handledBy { (m) ->

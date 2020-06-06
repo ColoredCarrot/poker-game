@@ -95,7 +95,7 @@ open class Peer : Messenger<SessionId> {
             // Connection to remote closed
             log("disconnected from $remoteId")
             hook.disconnected.notify(remoteId)
-            //remotes.remove(remote)
+            remotes.remove(remoteId)
             //js("start(true)") // TODO: what's this
         })
     }
@@ -111,7 +111,8 @@ open class Peer : Messenger<SessionId> {
                 remote.send(data)
                 log("send($peer): ", data)
             } else {
-                throw ConnectionClosedException("Cannot send because connection is closed. peer=$peer remote=$remote")
+                // TODO only warn if the remote object is still in remotes after a second or so
+                console.warn("Skipping sending message to $peer because the connection is closed.")
             }
         }
     }
