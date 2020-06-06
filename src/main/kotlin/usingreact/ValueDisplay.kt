@@ -7,7 +7,10 @@ import react.RBuilder
 import react.RProps
 import react.RPureComponent
 import react.RState
+import react.dom.div
 import react.dom.input
+import react.dom.span
+import shared.htmlAttrs
 
 fun RBuilder.valueDisplay(value: String, autoFocus: Boolean = false) = child(ValueDisplay::class) {
     attrs {
@@ -28,13 +31,18 @@ private class ValueDisplayState : RState {
 private class ValueDisplay : RPureComponent<ValueDisplayProps, ValueDisplayState>() {
 
     override fun RBuilder.render() {
-        input(classes = "uk-input", type = InputType.text) {
-            attrs.value = props.value
-            attrs.autoFocus = props.autoFocus
-            attrs.readonly = true
-            attrs.onFocusFunction = { evt ->
-                val el = evt.currentTarget as? HTMLInputElement
-                el?.select()
+        div("uk-inline uk-width-1-1") {
+            span("uk-form-icon uk-form-icon-flip") {
+                htmlAttrs["uk-icon"] = "icon: copy"
+            }
+            input(classes = "uk-input", type = InputType.text) {
+                attrs.value = props.value
+                attrs.autoFocus = props.autoFocus
+                attrs.readonly = true
+                attrs.onFocusFunction = { evt ->
+                    val el = evt.currentTarget as? HTMLInputElement
+                    el?.select()
+                }
             }
         }
     }
