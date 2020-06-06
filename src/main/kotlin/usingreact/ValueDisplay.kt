@@ -1,6 +1,7 @@
 package usingreact
 
 import kotlinx.html.InputType
+import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onFocusFunction
 import org.w3c.dom.HTMLInputElement
@@ -11,6 +12,7 @@ import react.RState
 import react.dom.a
 import react.dom.div
 import react.dom.input
+import react.setState
 import shared.htmlAttrs
 import vendor.createRef
 import kotlin.browser.document
@@ -46,7 +48,11 @@ private class ValueDisplay : RPureComponent<ValueDisplayProps, ValueDisplayState
                         inputEl.focus()
                         inputEl.select()
                         document.execCommand("copy")
+                        setState { copied = true }
                     }
+                }
+                if (state.copied) {
+                    attrs.classes += "uk-text-success"
                 }
             }
             input(classes = "uk-input", type = InputType.text) {
