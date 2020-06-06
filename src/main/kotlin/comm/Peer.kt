@@ -5,7 +5,6 @@ import comm.msg.MessageHandler
 import comm.msg.MessageTypeRegistry
 import comm.msg.Messenger
 import kotlinext.js.jsObject
-import shared.Notify
 import shared.PNotify
 import shared.SessionId
 import toImplicitBoolean
@@ -42,11 +41,11 @@ open class Peer : Messenger<SessionId> {
 
         peer.on("connection") { c: DataConnection ->
             if (connectionAcceptor(c.peer)) {
-                log("accepted connection from ${c.peer}")
+                log("accepted connection from ${c.peer}: ", c)
                 remotes[c.peer] = c
                 ready(c)
             } else {
-                log("rejected connection from ${c.peer}")
+                log("rejected connection from ${c.peer}: ", c)
                 c.send("Connection rejected")
                 c.close()
             }
@@ -69,10 +68,6 @@ open class Peer : Messenger<SessionId> {
         val them = peer.connect(theirId, jsObject<dynamic> { reliable = true }) as DataConnection
         remotes[theirId] = them
 
-        them.on("open") {
-            log("connected to ${them.peer}")
-            hook.connected.notify()
-        }
         them.on("error") { err: dynamic ->
             log("error connecting to $theirId: ", err)
             hook.errConnecting.notify(err)
@@ -87,10 +82,17 @@ open class Peer : Messenger<SessionId> {
      */
     private fun ready(remote: DataConnection) {
         val remoteId = remote.peer
+
+        remote.on("open", fun() {
+            log("connected to $remoteId")
+            hook.connected.notify(remoteId)
+        })
+
         remote.on("data", fun(data: dynamic) {
             log("recv($remoteId): ", data)
             messageReceive(data as String)
         })
+
         remote.on("close", fun() {
             // Connection to remote closed
             log("disconnected from $remoteId")
@@ -162,7 +164,7 @@ open class Peer : Messenger<SessionId> {
         internal val open = PNotify<String>()
         internal val close = PNotify<() -> Unit>()
         internal val error = PNotify<dynamic>()
-        internal val connected = Notify()
+        internal val connected = PNotify<SessionId>()
         internal val disconnected = PNotify<SessionId>()
         internal val errConnecting = PNotify<dynamic>()
 
@@ -187,7 +189,12 @@ open class Peer : Messenger<SessionId> {
 
         fun error(handler: (err: dynamic) -> Unit) = error.handle(handler)
 
-        fun connectedToPeer(handler: () -> Unit) = connected.handle(handler)
+        /**
+         * Called after connecting to a peer either
+         * by trying to contact them ourselves or
+         * by accepting their connection request.
+         */
+        fun connectedToPeer(handler: (peer: SessionId) -> Unit) = connected.handle(handler)
 
         fun disconnectedFromPeer(handler: (peer: SessionId) -> Unit) = disconnected.handle(handler)
 

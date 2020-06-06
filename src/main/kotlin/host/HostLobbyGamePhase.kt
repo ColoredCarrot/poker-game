@@ -69,10 +69,9 @@ private class HostLobbyGamePhase : RComponent<HostLobbyGamePhaseProps, HostLobby
             setState { error = err }
         }
 
-        // TODO replace with onConnect or something and also hook into disconnects to --playersCount
-        props.connections.connectionAcceptor = {
+        connHook.connectedToPeer { sid ->
             setState { ++playersCount }
-            true
+            sendPlayerList()
         }
         connHook.disconnectedFromPeer { sid ->
             setState {
@@ -80,6 +79,8 @@ private class HostLobbyGamePhase : RComponent<HostLobbyGamePhaseProps, HostLobby
                 otherNames -= sid
             }
         }
+
+        props.connections.connectionAcceptor = { true }
 
         props.connections.receive(
             Messages.Lobby_SetName.Type handledBy { (m) ->
@@ -103,13 +104,17 @@ private class HostLobbyGamePhase : RComponent<HostLobbyGamePhaseProps, HostLobby
     ) {
         // Send update to participants when someone changes their name
         if (prevState.chooseName != state.chooseName || prevState.otherNames != state.otherNames) {
-            props.connections.send(
-                Messages.Lobby_UpdatePlayerList(
-                    allNames = state.otherNames.values + state.chooseName,
-                    sanitize = true // in case our name is blank
-                )
-            )
+            sendPlayerList()
         }
+    }
+
+    private fun sendPlayerList() {
+        props.connections.send(
+            Messages.Lobby_UpdatePlayerList(
+                allNames = state.otherNames.values + state.chooseName,
+                sanitize = true // in case our name is blank
+            )
+        )
     }
 
     override fun RBuilder.render() {
