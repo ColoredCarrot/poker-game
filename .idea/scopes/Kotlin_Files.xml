@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Kotlin Files" pattern="file[info.voidev.stash.poker-game.poker-game.main]:kotlin//*||file[info.voidev.stash.poker-game.poker-game.test]:kotlin//*" />
+</component>
